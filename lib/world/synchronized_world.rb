@@ -7,8 +7,8 @@ class World::SynchronizedWorld < World
       place_box(new_world, box, box.row, box.column)
     end
 
-    @swarms.each do |swarm|
-      swarm.each do |agent|
+    @players.each do |player|
+      player.swarm.each do |agent|
         perform_action(@world, new_world, agent)
       end
     end

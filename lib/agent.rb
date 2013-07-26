@@ -1,10 +1,11 @@
 require 'sprite'
 
 class Agent < Sprite
-  attr_reader :team
+  attr_reader :id, :team
 
-  def initialize(team)
+  def initialize(team, id)
     @team = team
+    @id = id
   end
 
   def action(state)

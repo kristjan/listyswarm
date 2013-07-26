@@ -4,8 +4,8 @@
   "columns": 10,
   "world": "SynchronizedWorld",
   "vision_radius": 2,
-  "agent_count": 10,
-  "agent_brains": [
+  "swarm_size": 10,
+  "agents": [
     "RandomAgent",
     "RandomAgent"
   ]
