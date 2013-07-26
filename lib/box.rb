@@ -18,7 +18,11 @@ class Box < Sprite
   end
 
   def owned_by?(representative)
-    representative = representative.player if representative.is_a?(Agent)
-    owner == representative
+    return false if owner.nil?
+
+    representative_team = representative.team if representative.is_a?(AgentBehavior) || representative.is_a?(Agent)
+    owner_team = owner.team
+
+    owner_team == representative_team
   end
 end

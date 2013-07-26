@@ -16,9 +16,9 @@ class Universe
     @ticks = 0
     @players = []
 
-    options[:agents].each_with_index do |agent, i|
+    options[:agent_behaviors].each_with_index do |agent_behavior, i|
       players << Player.new(
-        agent:      agent,
+        agent_behavior:      agent_behavior,
         swarm_size: options[:swarm_size],
         team:       TEAM_LABELS[i],
       ).tap do |player|
@@ -37,7 +37,7 @@ class Universe
     puts "BANG. #{world.rows}x#{world.columns} Universe begins."
     puts "#{players.size} players:"
     players.each do |player|
-      puts "\t#{player.agent.class.name} (#{player.swarm.size})"
+      puts "\t#{player.agent_behavior.class.name} (#{player.swarm.size})"
     end
 
     puts 'Start', world, nil
@@ -47,14 +47,15 @@ class Universe
       `clear`
       puts nil, "Tick #{@ticks}", world
       @logger.log(self)
+      STDIN.gets if options[:newline_wait]
     end until @victory.done?
     winners = @victory.winners
     puts winners.size > 1 ? "It's a tie!" : "We have a winner!"
-    max_agent_length = @players.map{|player| player.agent.name.length}.max
+    max_agent_length = @players.map{|player| player.agent_behavior.name.length}.max
     @players.sort_by{|player| -player.score}.each do |player|
       puts [
         player.team,
-        player.agent.name.ljust(max_agent_length + 2),
+        player.agent_behavior.name.ljust(max_agent_length + 2),
         player.score.to_s.rjust(5)
       ].join(' ')
     end

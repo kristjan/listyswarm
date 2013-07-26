@@ -35,9 +35,9 @@ class World::SynchronizedWorld < World
     row, col = [agent.row, agent.column]
     old_row, old_col = [row, col]
 
-    agent.sensors = Sensors.create(self, agent)
-
-    action = agent.action
+    agent.agent_behavior.sensors = Sensors.create(self, agent)
+    action = agent.agent_behavior.action
+    puts "Performing #{action}"
     case action
     when :north
       row -= 1 unless row == 0

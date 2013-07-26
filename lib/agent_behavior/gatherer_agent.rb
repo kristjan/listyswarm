@@ -1,5 +1,4 @@
-class Agent::GathererAgent < Agent
-
+class AgentBehavior::GathererAgent < AgentBehavior
   def action
     @bias ||= [:horizontal, :none, :vertical].sample
     @bias_weight ||= rand(5)
@@ -12,8 +11,10 @@ class Agent::GathererAgent < Agent
 
     # I'm on a box!
     on_top_of_box = sensors.vision(0, 0).select(&:box?).any? do |box|
+      puts "owned by self: #{box.owned_by?(self)}"
       !box.owned_by?(self)
     end
+    puts "on_top_of_box: #{on_top_of_box}"
     if !sensors.have_box? && on_top_of_box
       return :pickup_box
     end
@@ -25,12 +26,17 @@ class Agent::GathererAgent < Agent
         !box.owned_by?(self)
       end
     end
+
     if box_coords
       return towards_box(box_coords)
     end
 
     # Let's look for a box
     return away_from_spawn_point.select{|dir| can_move?(dir)}.shuffle.first
+  end
+
+  def spawn_point
+    sensors.spawn_point
   end
 
   def near_box_chain?

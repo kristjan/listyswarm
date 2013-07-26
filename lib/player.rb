@@ -1,14 +1,14 @@
 require 'loader'
 
 class Player
-  attr_reader :agent, :spawn_point, :swarm, :team
+  attr_reader :agent_behavior, :spawn_point, :swarm, :team
   attr_accessor :score
 
   def initialize(options)
     @team = options[:team]
-    @agent = Loader.load_class(:agent, options[:agent])
+    @agent_behavior = Loader.load_class(:agent_behavior, options[:agent_behavior])
     @swarm = options[:swarm_size].to_i.times.map do |id|
-      @agent.new(self, id)
+      Agent.new(self, id)
     end
   end
 

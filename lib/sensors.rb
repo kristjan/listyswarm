@@ -1,5 +1,5 @@
 class Sensors
-  attr_accessor :vision_array, :vision_radius, :has_box, :foe_teams
+  attr_accessor :vision_array, :vision_radius, :has_box, :foe_teams, :friendly_spawn_dir, :spawn_point
 
   # Generates the hash that is given to the behavior function
   def self.create(world, agent)
@@ -10,8 +10,25 @@ class Sensors
       :vision_radius => world.options[:vision_radius],
       :vision_array => @vision_capture.generate_vision(world, agent),
       :has_box => agent.has_box?,
-      :foe_teams => world.players.map(&:team),
+      :foe_teams => world.players.select{|p| p != agent.player}.map(&:team),
+      :friendly_spawn_dir => direction_of(agent, agent.spawn_point),
+
+      #deprecated: don't use spawn point
+      :spawn_point => agent.spawn_point
     })
+  end
+
+  # returns an ordered pair of magnitudes, normalized such that their
+  # distance is equal to 1 (like a unit circle in geometry)
+  def self.direction_of(agent, target)
+    start_row, start_col = agent.row, agent.column
+    end_row, end_col = target.row, target.column
+
+    row_diff = end_row - start_row
+    col_diff = end_col - start_col
+    dist = Math.sqrt(row_diff ** 2.0 + col_diff ** 2.0)
+
+    [row_diff / dist, col_diff / dist]
   end
 
   def initialize(options)
