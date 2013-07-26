@@ -1,18 +1,18 @@
 {
   "boxes": 100,
   "rows": 100,
-  "columns": 250,
+  "columns": 100,
   "world": "SynchronizedWorld",
   "vision_radius": 2,
   "swarm_size": 100,
   "agents": [
-    "RandomAgent",
-    "RandomAgent"
+    "GathererAgent",
+    "GathererAgent"
   ],
   "victory": {
     "name": "FiniteTimeVictory",
     "params": {
-      "ticks": 10000
+      "ticks": 500
     }
   },
   "logger": "NullLogger"
