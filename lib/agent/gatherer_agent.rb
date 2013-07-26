@@ -1,32 +1,45 @@
 class Agent::GathererAgent < Agent
 
-  BIAS_WEIGHT = 3
-
   def action
     @bias ||= [:horizontal, :none, :vertical].sample
     @bias_weight ||= rand(5)
 
     # I got a box!
     if sensors.have_box?
-      return :drop_box if on_spawn_point?
+      return :drop_box if on_spawn_point? || near_box_chain?
       return towards_spawn_point.select{|dir| can_move?(dir)}.shuffle.first
     end
 
     # I'm on a box!
-    on_top_of_box = sensors.vision(0, 0).any? {|sprite| sprite.is_a?(Box) }
-    return :pickup_box if !sensors.have_box? && on_top_of_box && !on_spawn_point?
+    on_top_of_box = sensors.vision(0, 0).select(&:box?).any? do |box|
+      !box.owned_by?(self)
+    end
+    if !sensors.have_box? && on_top_of_box
+      return :pickup_box
+    end
 
     # I can see a box!
-    boxes = sensors.boxes
-    if boxes.any?
-      box_coords = boxes.first
-      unless sensors.vision(*box_coords).detect{|sprite| sprite == spawn_point}
-        return towards_box(box_coords)
+    all_box_coords = sensors.boxes
+    box_coords = all_box_coords.detect do |possible_coords|
+      sensors.vision(*possible_coords).select(&:box?).detect do |box|
+        !box.owned_by?(self)
       end
+    end
+    if box_coords
+      return towards_box(box_coords)
     end
 
     # Let's look for a box
     return away_from_spawn_point.select{|dir| can_move?(dir)}.shuffle.first
+  end
+
+  def near_box_chain?
+    towards_spawn_point.detect do |direction|
+      coords = Coordinate.neighbor([0, 0], direction)
+      sensors.vision(*coords).select(&:box?).any? do |box|
+        box.owned_by?(self)
+      end
+    end
   end
 
   def towards_box(coords)
