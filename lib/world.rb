@@ -8,14 +8,14 @@ class World
     @rows = options[:rows]
     @columns = options[:columns]
     @world = build_world
-    @armies = options[:armies]
-    @armies.each { |army| place_army(army) }
+    @swarms = options[:swarms]
+    @swarms.each { |swarm| place_swarm(swarm) }
     place_boxes(options[:boxes].to_i)
   end
 
-  def place_army(army)
-    coords = random_coordinates(army.size)
-    army.zip(coords).each do |agent, (row, col)|
+  def place_swarm(swarm)
+    coords = random_coordinates(swarm.size)
+    swarm.zip(coords).each do |agent, (row, col)|
       @world[row][col] << agent
       agent.location = [row, col]
     end

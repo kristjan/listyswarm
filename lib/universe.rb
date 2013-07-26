@@ -4,7 +4,7 @@ require 'agent'
 require 'world'
 
 class Universe
-  attr_reader :armies, :options, :world
+  attr_reader :swarms, :options, :world
 
   TEAM_LABELS = %w[x o s w]
 
@@ -13,18 +13,18 @@ class Universe
     @agent_brains = options[:agent_brains].map do |agent_name|
       load_class(:agent, agent_name)
     end
-    @armies = []
+    @swarms = []
     @agent_brains.zip(TEAM_LABELS).each_with_index do |(brain, team), i|
-      armies[i] = options[:agent_count].to_i.times.map { brain.new(team) }
+      swarms[i] = options[:agent_count].to_i.times.map { brain.new(team) }
     end
-    @world = world_class.new(options.merge(armies: armies))
+    @world = world_class.new(options.merge(swarms: swarms))
   end
 
   def start
     puts "BANG. #{world.rows}x#{world.columns} Universe begins."
-    puts "#{armies.size} armies:"
-    armies.each do |army|
-      puts "\t#{army.first.class.name} (#{army.size})"
+    puts "#{swarms.size} swarms:"
+    swarms.each do |swarm|
+      puts "\t#{swarm.first.class.name} (#{swarm.size})"
     end
     begin
       puts nil, world
