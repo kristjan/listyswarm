@@ -3,6 +3,13 @@ require 'sprite'
 class Sprite
   attr_reader :row, :column
 
+  def self.inherited(subclass)
+    name = subclass.name.underscore
+    define_method "#{name}?" do
+      self.class.name.underscore == name
+    end
+  end
+
   def location
     [@row, @column] if @row && @column
   end
