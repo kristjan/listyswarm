@@ -5,16 +5,21 @@ class World
   attr_reader :rows, :columns
 
   def initialize(options)
-    @options = options
-    @rows    = options[:rows]
-    @columns = options[:columns]
-    @players = []
-    @world   = build_world
+    @options        = options
+    @rows           = options[:rows]
+    @columns        = options[:columns]
+    @players        = []
+    @spawn_points   = []
+    @world          = build_world
     @vision_capture = VisionCapture.new(options[:vision_radius])
     place_boxes(options[:boxes].to_i)
   end
 
   def add_player(player)
+    spawn_point = pick_spawn_point(@players.size)
+    @spawn_points << spawn_point
+    player.spawn_point = spawn_point
+    @world[spawn_point.row][spawn_point.column] << spawn_point
     @players << player
     place_swarm(player.swarm)
   end
@@ -63,6 +68,7 @@ class World
     char = case item
     when Box then 'b'
     when Agent then item.team
+    when SpawnPoint then item.name
     else ' '
     end.to_s
   end
@@ -93,7 +99,19 @@ class World
     row_coords.zip(col_coords).first(count)
   end
 
-  PRECEDENCE = %w[Agent Box NilClass]
+  SPAWN_LABELS = (1..4).to_a
+  def pick_spawn_point(index)
+    coords = [
+      [0, 0],
+      [@rows - 1, @columns - 1],
+      [0, @columns - 1],
+      [@rows - 1, 0]
+    ][index]
+
+    SpawnPoint.new(SPAWN_LABELS[index], coords)
+  end
+
+  PRECEDENCE = %w[SpawnPoint Agent Box NilClass]
   def self.sort_things(things)
     things.sort_by do |thing|
       PRECEDENCE.index(thing.class.name.split('::').first)

@@ -1,7 +1,7 @@
 require 'loader'
 
 class Player
-  attr_reader :agent, :swarm, :team
+  attr_reader :agent, :spawn_point, :swarm, :team
 
   def initialize(options)
     @team = options[:team]
@@ -9,5 +9,10 @@ class Player
     @swarm = options[:swarm_size].to_i.times.map do |id|
       @agent.new(@team, id)
     end
+  end
+
+  def spawn_point=(point)
+    raise "SpawnPoint can not be set twice." if @spawn_point
+    @spawn_point = point
   end
 end

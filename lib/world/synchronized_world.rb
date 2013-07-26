@@ -7,6 +7,10 @@ class World::SynchronizedWorld < World
       place_box(new_world, box, box.row, box.column)
     end
 
+    @spawn_points.each do |point|
+      new_world[point.row][point.column] << point
+    end
+
     @players.each do |player|
       player.swarm.each do |agent|
         perform_action(@world, new_world, agent)
