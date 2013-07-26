@@ -45,7 +45,16 @@ class Universe
       @ticks += 1
       puts nil, "Tick #{@ticks}", world
     end until @victory.done?
-    puts "#{@victory.winner.team} wins! #{@victory.winner.score}"
+    winners = @victory.winners
+    puts winners.size > 1 ? "It's a tie!" : "We have a winner!"
+    max_agent_length = @players.map{|player| player.agent.name.length}.max
+    @players.sort_by{|player| -player.score}.each do |player|
+      puts [
+        player.team,
+        player.agent.name.ljust(max_agent_length + 2),
+        player.score.to_s.rjust(5)
+      ].join(' ')
+    end
   end
 
   private

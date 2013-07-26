@@ -20,12 +20,13 @@ class Victory
     player.score = score(player)
   end
 
-  def winner
-    return @winner if @winner
+  def winners
+    return @winners if @winners
     return nil unless done?
 
     players.each{|player| update_score(player)}
-    @winner = players.sort_by(&:score).last
+    high_score = players.map(&:score).max
+    @winners = players.select{|player| player.score == high_score}
   end
 
   def world
