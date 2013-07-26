@@ -30,6 +30,8 @@ class Universe
     @victory = Loader.load_class(:victory,
       options[:victory][:name]
     ).new(self, options[:victory][:params])
+
+    @logger = Loader.load_class(:logger, options[:logger]).new
   end
 
   def start
@@ -44,6 +46,7 @@ class Universe
       world.tick
       @ticks += 1
       puts nil, "Tick #{@ticks}", world
+      @logger.log(self)
     end until @victory.done?
     winners = @victory.winners
     puts winners.size > 1 ? "It's a tie!" : "We have a winner!"

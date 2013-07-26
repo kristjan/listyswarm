@@ -14,5 +14,6 @@
     "params": {
       "ticks": 100
     }
-  }
+  },
+  "logger": "TextFrameLogger"
 }
