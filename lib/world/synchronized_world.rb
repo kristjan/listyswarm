@@ -117,7 +117,10 @@ class World::SynchronizedWorld < World
           runner_up, winner = combatants.last(2)
           body_count = runner_up.last.size # agent count
           killed = combatants.map{|player, agents| agents.first(body_count)}
-          killed.flatten.each{|agent| self.class.respawn(world, agent) }
+          killed.flatten.each do |agent|
+            drop_box(world, agent) if agent.has_box?
+            self.class.respawn(world, agent)
+          end
         end
       end
     end
