@@ -10,7 +10,6 @@ class World
     @columns = options[:columns]
     @players = []
     @world   = build_world
-    @vision_capture = VisionCapture.new(options[:vision_radius])
     place_boxes(options[:boxes].to_i)
   end
 
@@ -46,6 +45,16 @@ class World
     end
   end
 
+  def self.add_sprite(world_arr, sprite, row, col)
+    sprite.location = [row, col]
+
+    if world_arr[sprite.row][sprite.column].nil?
+      world_arr[sprite.row][sprite.column] = []
+    else
+      world_arr[sprite.row][sprite.column] << sprite
+    end
+  end
+
   def tick
     raise NotImplementedError, "#{self.class.name} must implement #{__method__}"
   end
@@ -62,11 +71,10 @@ class World
 
   def self.character_for(things)
     item = sort_things(things).first
-    char = case item
-    when Box then 'b'
-    when Agent then item.team
-    when Wall then '#'
-    else ' '
+    if item.is_a?(Sprite)
+      item.display_char
+    else
+      ' '
     end.to_s
   end
 
@@ -79,8 +87,8 @@ class World
   end
 
   def place_box(world, box, row, column)
-    box.location = [row, column]
-    @world[box.row][box.column] << box
+    box.is_held = false
+    self.class.add_sprite(world, box, row, column)
   end
 
   def place_boxes(count)
