@@ -10,6 +10,7 @@ class World
     @columns        = options[:columns]
     @players        = []
     @spawn_points   = []
+    @boxes          = []
     @world          = build_world
     @vision_capture = VisionCapture.new(options[:vision_radius])
     place_boxes(options[:boxes].to_i)
@@ -57,6 +58,13 @@ class World
 
   private
 
+  def self.respawn(world, agent)
+    world[agent.row][agent.column].delete(agent) if agent.location
+    row, col = agent.player.spawn_point.location
+    world[row][col] << agent
+    agent.location = [row, col]
+  end
+
   def build_world
     make_grid(@rows, @columns)
   end
@@ -77,11 +85,7 @@ class World
   end
 
   def place_swarm(player)
-    row, col = player.spawn_point.location
-    player.swarm.each do |agent|
-      @world[row][col] << agent
-      agent.location = [row, col]
-    end
+    player.swarm.each {|agent| self.class.respawn(world, agent) }
   end
 
   def place_box(world, box, row, column)
@@ -91,7 +95,7 @@ class World
 
   def place_boxes(count)
     random_coordinates(count).each do |row, col|
-      (@boxes ||= []) << Box.new
+      @boxes << Box.new
       place_box(@world, @boxes.last, row, col)
     end
   end

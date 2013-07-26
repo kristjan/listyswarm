@@ -4,7 +4,7 @@ class Sprite
   attr_reader :row, :column
 
   def location
-    [@row, @column]
+    [@row, @column] if @row && @column
   end
 
   def location=(coords)
