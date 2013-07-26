@@ -31,7 +31,7 @@ class Victory::FiniteTimeVictory < Victory
 
     return 0 unless world[row, col].detect{|item| item.is_a?(Box)}
 
-    longest = 1 + Coordinate.DIRECTIONS.map do |dir|
+    longest = 1 + Coordinate::DIRECTIONS.map do |dir|
       longest_chain(Coordinate.neighbor(coord, dir), visited)
     end.max
 
