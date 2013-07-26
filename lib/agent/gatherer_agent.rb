@@ -1,4 +1,4 @@
-class Agent::BoxGrabTest < Agent
+class Agent::GathererAgent < Agent
 
   BIAS_WEIGHT = 3
 
