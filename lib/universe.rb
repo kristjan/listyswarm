@@ -58,24 +58,32 @@ class Universe
   private
 
   def build_header
-    top_line = "Tick #{@ticks}"
-
     @victory.update_scores
+
+    max_agent_length = @players.map{|player| player.agent_behavior.name.length}.max
+    header = %w[Team Behavior Agents Score]
+    widths = [6, max_agent_length + 2, 8, 7]
+
+    lines = []
+    lines << header.zip(widths).map {|data, width| data.to_s.ljust(width)}
+    @players.sort_by{|player| -player.score}.each do |player|
+      lines << [
+        player.team,
+        player.agent_behavior.name,
+        player.swarm.size,
+        player.score.to_s,
+      ].zip(widths).map do |data, width|
+        data.to_s.ljust(width)
+      end
+    end
+    top_line = "Tick #{@ticks}"
     if @victory.done?
       winners = @victory.winners
       top_line << ' - ' + (winners.size > 1 ? "It's a tie!" : "We have a winner!")
     end
+    lines.unshift([top_line, ''])
 
-    lines = [top_line]
-
-    max_agent_length = @players.map{|player| player.agent_behavior.name.length}.max
-    @players.sort_by{|player| -player.score}.each do |player|
-      lines << [
-        player.team,
-        player.agent_behavior.name.ljust(max_agent_length + 2),
-        player.score.to_s.rjust(5)
-      ].join(' ')
-    end
+    lines = lines.map(&:join)
 
     lines
   end
