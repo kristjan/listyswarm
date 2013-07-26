@@ -18,23 +18,35 @@ class Sensors
     options.each_pair {|key, value| self.send("#{key}=", value) }
   end
 
+  def boxes
+    [].tap do |visible_boxes|
+      vision_array.each_with_index do |row, row_num|
+        row.each_with_index do |sprites, column_num|
+          if sprites.detect{|sprite| sprite.is_a?(Box)}
+            visible_boxes << [row_num - row_radius, column_num - column_radius]
+          end
+        end
+      end
+    end
+  end
+
   # the offsets should be <= the vision radius.
   # returns the sprites at the position offset to the agent
   # a [0,0] offset would return the sprites on the agents square
   def vision(row_offset, column_offset)
-    # these numbers will always be odd
-    rows = vision_array.length
-    columns = vision_array.first.length
-
-    # these will probably be the same, but maybe not later
-    rows_radius = (rows / 2.0).floor
-    columns_radius = (columns / 2.0).floor
-
-    vision_array[rows_radius + row_offset][columns_radius + column_offset]
+    vision_array[row_radius + row_offset][column_radius + column_offset]
   end
 
   def have_box?
     self.has_box
+  end
+
+  def row_radius
+    (vision_array.length / 2.0).floor
+  end
+
+  def column_radius
+    (vision_array.first.length / 2.0).floor
   end
 
   def put_vision

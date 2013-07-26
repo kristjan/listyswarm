@@ -12,12 +12,31 @@ class Agent::BoxGrabTest < Agent
       return towards_spawn_point.select{|dir| can_move?(dir)}.shuffle.first
     end
 
-    # Can I get a box?
+    # I'm on a box!
     on_top_of_box = sensors.vision(0, 0).any? {|sprite| sprite.is_a?(Box) }
     return :pickup_box if !sensors.have_box? && on_top_of_box && !on_spawn_point?
 
+    # I can see a box!
+    boxes = sensors.boxes
+    if boxes.any?
+      box_coords = boxes.first
+      unless sensors.vision(*box_coords).detect{|sprite| sprite == spawn_point}
+        return towards_box(box_coords)
+      end
+    end
+
     # Let's look for a box
     return away_from_spawn_point.select{|dir| can_move?(dir)}.shuffle.first
+  end
+
+  def towards_box(coords)
+    row, col = coords # Relative
+    case
+    when row < 0 then :north
+    when row > 0 then :south
+    when col < 0 then :west
+    when col > 0 then :east
+    end
   end
 
   def towards_spawn_point
@@ -36,5 +55,4 @@ class Agent::BoxGrabTest < Agent
     when :horizontal then dirs.concat((dirs - [:north, :south]) * @bias_weight)
     end
   end
-
 end
