@@ -5,28 +5,38 @@ class World
   attr_reader :rows, :columns
 
   def initialize(options)
-    @options = options
-    @rows    = options[:rows]
-    @columns = options[:columns]
-    @players = []
-    @world   = build_world
+    @options        = options
+    @rows           = options[:rows]
+    @columns        = options[:columns]
+    @players        = []
+    @spawn_points   = []
+    @boxes          = []
+    @world          = build_world
     place_boxes(options[:boxes].to_i)
   end
 
+  def [](row, col)
+    @world[row][col]
+  end
+
   def add_player(player)
+    spawn_point = pick_spawn_point(@players.size)
+    @spawn_points << spawn_point
+    player.spawn_point = spawn_point
+    @world[spawn_point.row][spawn_point.column] << spawn_point
     @players << player
-    place_swarm(player.swarm)
+    place_swarm(player)
   end
 
-  def to_s
-    self.class.world_to_s(@world)
+  def to_s(border=true)
+    self.class.world_to_s(@world, border)
   end
 
-  def self.world_to_s(world)
+  def self.world_to_s(world, border=true)
     "".tap do |out|
-      out << '+' + '-' * world.length + "\n"
+      out << '+' + '-' * world.length + "\n" if border
       world.each_with_index do |row, i|
-        out << '|'
+        out << '|' if border
         row.each do |things|
           out << character_for(things)
         end
@@ -61,6 +71,13 @@ class World
 
   private
 
+  def self.respawn(world, agent)
+    world[agent.row][agent.column].delete(agent) if agent.location
+    row, col = agent.player.spawn_point.location
+    world[row][col] << agent
+    agent.location = [row, col]
+  end
+
   def build_world
     make_grid(@rows, @columns)
   end
@@ -78,12 +95,8 @@ class World
     end.to_s
   end
 
-  def place_swarm(swarm)
-    coords = random_coordinates(swarm.size)
-    swarm.zip(coords).each do |agent, (row, col)|
-      @world[row][col] << agent
-      agent.location = [row, col]
-    end
+  def place_swarm(player)
+    player.swarm.each {|agent| self.class.respawn(world, agent) }
   end
 
   def place_box(world, box, row, column)
@@ -93,7 +106,7 @@ class World
 
   def place_boxes(count)
     random_coordinates(count).each do |row, col|
-      (@boxes ||= []) << Box.new
+      @boxes << Box.new
       place_box(@world, @boxes.last, row, col)
     end
   end
@@ -104,7 +117,19 @@ class World
     row_coords.zip(col_coords).first(count)
   end
 
-  PRECEDENCE = %w[Agent Box NilClass]
+  SPAWN_LABELS = (1..4).to_a
+  def pick_spawn_point(index)
+    coords = [
+      [0, 0],
+      [@rows - 1, @columns - 1],
+      [0, @columns - 1],
+      [@rows - 1, 0]
+    ][index]
+
+    SpawnPoint.new(SPAWN_LABELS[index], coords)
+  end
+
+  PRECEDENCE = %w[SpawnPoint Agent Box NilClass]
   def self.sort_things(things)
     things.sort_by do |thing|
       PRECEDENCE.index(thing.class.name.split('::').first)

@@ -7,6 +7,10 @@ class World::SynchronizedWorld < World
     new_world = build_world
 
 
+    @spawn_points.each do |point|
+      new_world[point.row][point.column] << point
+    end
+
     @players.each do |player|
       player.swarm.each do |agent|
         perform_action(new_world, agent)
@@ -21,9 +25,12 @@ class World::SynchronizedWorld < World
       end
     end
 
+    rectify(new_world)
+
     @world = new_world
   end
 
+  private
   def perform_action(new_world, agent)
     row, col = [agent.row, agent.column]
     old_row, old_col = [row, col]
@@ -84,4 +91,20 @@ class World::SynchronizedWorld < World
     agent.box = nil
   end
 
+  def rectify(world)
+    world.each do |row|
+      row.each do |items|
+        combatants = items.select do |item|
+          item.is_a?(Agent)
+        end.group_by(&:player).to_a.sort_by{|player, agents| agents.size}
+
+        if combatants.size > 1
+          runner_up, winner = combatants.last(2)
+          body_count = runner_up.last.size # agent count
+          killed = combatants.map{|player, agents| agents.first(body_count)}
+          killed.flatten.each{|agent| self.class.respawn(world, agent) }
+        end
+      end
+    end
+  end
 end

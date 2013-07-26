@@ -4,9 +4,16 @@
   "columns": 10,
   "world": "SynchronizedWorld",
   "vision_radius": 2,
-  "swarm_size": 10,
+  "swarm_size": 5,
   "agents": [
-    "BoxGrabTest"
+    "RandomAgent",
     "RandomAgent"
-  ]
+  ],
+  "victory": {
+    "name": "FiniteTimeVictory",
+    "params": {
+      "ticks": 100
+    }
+  },
+  "logger": "TextFrameLogger"
 }

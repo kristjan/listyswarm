@@ -1,11 +1,11 @@
 require 'sprite'
 
 class Agent < Sprite
-  attr_reader :id, :team
+  attr_reader :id, :player
   attr_accessor :box
 
-  def initialize(team, id)
-    @team = team
+  def initialize(player, id)
+    @player = player
     @id = id
   end
 
@@ -27,5 +27,9 @@ class Agent < Sprite
 
   def action(state)
     raise NotImplementedError, "#{self.class.name} must implement #{__method__}"
+  end
+
+  def team
+    player.team
   end
 end
