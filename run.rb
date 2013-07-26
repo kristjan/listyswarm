@@ -1,6 +1,26 @@
 #!/usr/bin/env ruby
 
 $:.unshift(File.dirname(__FILE__))
+
+require 'json'
 require 'universe'
 
-Universe.new.start
+filename = ARGV[0]
+
+def usage
+  <<-TXT
+    Usage: #{$0} <config.json>
+  TXT
+end
+
+unless filename
+  print usage
+  exit(1)
+end
+
+config = JSON.parse(File.read(filename)).inject({}) do |config, (key, val)|
+  config[key.to_sym] = val
+  config
+end
+
+Universe.new(config).start
