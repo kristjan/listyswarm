@@ -6,13 +6,16 @@ require 'world'
 class Universe
   attr_reader :armies, :options, :world
 
+  TEAM_LABELS = %w[x o s w]
+
   def initialize(options)
     @options = options
     @agent_brains = options[:agent_brains].map do |agent_name|
       load_class(:agent, agent_name)
     end
-    @armies = @agent_brains.map do |agent_brain|
-      options[:agent_count].to_i.times.map { agent_brain.new }
+    @armies = []
+    @agent_brains.zip(TEAM_LABELS).each_with_index do |(brain, team), i|
+      armies[i] = options[:agent_count].to_i.times.map { brain.new(team) }
     end
     @world = world_class.new(options.merge(armies: armies))
   end
