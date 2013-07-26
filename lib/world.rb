@@ -23,12 +23,15 @@ class World
 
   def add_player(player)
     spawn_point = pick_spawn_point(@players.size)
+    @spawn_behavior = Loader.load_class(
+      :spawn,
+      options[:spawn][:name]
+    ).new(options[:spawn][:params])
     @spawn_points << spawn_point
     player.spawn_point = spawn_point
     spawn_point.player = player
     @world[spawn_point.row][spawn_point.column] << spawn_point
     @players << player
-    place_swarm(player)
   end
 
   def to_s(border=true)
@@ -75,7 +78,6 @@ class World
   private
 
   def self.respawn(world, agent)
-    world[agent.row][agent.column].delete(agent) if agent.location
     row, col = agent.player.spawn_point.location
     world[row][col] << agent
     agent.location = [row, col]
@@ -96,10 +98,6 @@ class World
     else
       ' '
     end.to_s
-  end
-
-  def place_swarm(player)
-    player.swarm.each {|agent| self.class.respawn(world, agent) }
   end
 
   def place_box(world, box, row, column)

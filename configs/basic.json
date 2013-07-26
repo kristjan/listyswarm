@@ -4,7 +4,7 @@
   "columns": 30,
   "world": "SynchronizedWorld",
   "vision_radius": 2,
-  "swarm_size": 10,
+  "swarm_size": 50,
   "agent_behaviors": [
     "GathererAgent",
     "GathererAgent"
@@ -19,6 +19,9 @@
   "newline_wait": false,
   "sleep_seconds": 0.1,
   "random_seed": 1,
+  "spawn": {
+    "name": "InstantSpawn"
+  },
   "log": {
     "enabled": true
   }

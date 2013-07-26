@@ -10,7 +10,9 @@ class World::SynchronizedWorld < World
       new_world[point.row][point.column] << point
     end
 
+
     @players.each do |player|
+      @spawn_behavior.spawn(self, new_world, player)
       player.swarm.each do |agent|
         perform_action(new_world, agent)
       end
@@ -119,7 +121,8 @@ class World::SynchronizedWorld < World
           killed = combatants.map{|player, agents| agents.first(body_count)}
           killed.flatten.each do |agent|
             drop_box(world, agent) if agent.has_box?
-            self.class.respawn(world, agent)
+            world[agent.row][agent.column].delete(agent) if agent.location
+            agent.player.kill(agent)
           end
         end
       end
