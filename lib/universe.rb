@@ -4,29 +4,29 @@ require 'agent'
 require 'world'
 
 class Universe
-  attr_reader :agents, :options, :world
+  attr_reader :armies, :options, :world
 
   def initialize(options)
     @options = options
-    @world = world_class.new(options[:rows], options[:columns])
-    @world.place_boxes(options[:boxes].to_i)
-    @agents = options[:agents].map {|agent_name| load_agent(agent_name) }
+    @agent_brains = options[:agent_brains].map do |agent_name|
+      load_class(:agent, agent_name)
+    end
+    @armies = @agent_brains.map do |agent_brain|
+      options[:agent_count].to_i.times.map { agent_brain.new }
+    end
+    @world = world_class.new(options.merge(armies: armies))
   end
 
   def start
     puts "BANG. #{world.rows}x#{world.columns} Universe begins."
     puts world
-    puts "#{agents.size} agents:"
-    agents.each do |agent|
-      puts "\t#{agent.class.name}"
+    puts "#{armies.size} armies:"
+    armies.each do |army|
+      puts "\t#{army.first.class.name} (#{army.size})"
     end
   end
 
   private
-
-  def load_agent(name)
-    load_class(:agent, name).new
-  end
 
   def load_class(prefix, name)
     class_name = "#{prefix}/#{name.underscore}"

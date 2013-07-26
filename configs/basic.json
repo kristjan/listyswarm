@@ -3,7 +3,8 @@
   "rows": 10,
   "columns": 10,
   "world": "SynchronizedWorld",
-  "agents": [
+  "agent_count": 10,
+  "agent_brains": [
     "RandomAgent",
     "RandomAgent"
   ]

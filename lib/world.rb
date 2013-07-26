@@ -6,10 +6,11 @@ class World
     nil => ' '
   }
 
-  def initialize(rows, columns)
-    @rows = rows
-    @columns = columns
+  def initialize(options)
+    @rows = options[:rows]
+    @columns = options[:columns]
     @world = Array.new(@rows) { Array.new(@columns) }
+    place_boxes(options[:boxes].to_i)
   end
 
   def place_boxes(boxes)
