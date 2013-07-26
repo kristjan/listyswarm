@@ -8,10 +8,12 @@ class Universe
   def initialize(options)
     @options = options
     @world = world_class.new(options[:rows], options[:columns])
+    @world.place_boxes(options[:boxes].to_i)
   end
 
   def start
     puts "BANG. #{world.rows}x#{world.columns} Universe begins."
+    puts world
   end
 
   private

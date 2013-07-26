@@ -1,5 +1,6 @@
 {
-  "rows": 100,
-  "columns": 100,
+  "boxes": 5,
+  "rows": 10,
+  "columns": 10,
   "world": "SynchronizedWorld"
 }
