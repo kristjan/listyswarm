@@ -20,7 +20,6 @@ class World::SynchronizedWorld < World
     #only copy boxes that aren't being held by an agent
     @boxes.each do |box|
       if !box.is_held
-        puts "placing box #{[box.row, box.column]}"
         place_box(new_world, box, box.row, box.column)
       end
     end
@@ -60,12 +59,7 @@ class World::SynchronizedWorld < World
   end
 
   def pickup_box(new_world, agent)
-    if agent.has_box?
-      puts "Can't pickup box"
-      return
-    end
-
-    puts "Picked up box"
+    return if agent.has_box?
 
     #find a box that isn't held
     box = world[agent.row][agent.column].find do |sprite|
@@ -79,12 +73,7 @@ class World::SynchronizedWorld < World
   end
 
   def drop_box(new_world, agent)
-    if !agent.has_box?
-      puts "Can't drop box"
-      return
-    end
-
-    puts "Dropping box"
+    return unless agent.has_box?
 
     agent.box.is_held = false
     place_box(new_world, agent.box, agent.row, agent.column)

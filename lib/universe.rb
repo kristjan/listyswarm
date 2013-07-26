@@ -11,7 +11,6 @@ class Universe
   TEAM_LABELS = %w[x o s w]
 
   def initialize(options)
-    puts options.inspect
     @options = options
     @world = world_class.new(options)
     @ticks = 0
@@ -45,6 +44,7 @@ class Universe
     begin
       world.tick
       @ticks += 1
+      `clear`
       puts nil, "Tick #{@ticks}", world
       @logger.log(self)
     end until @victory.done?
