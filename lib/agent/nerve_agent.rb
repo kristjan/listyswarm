@@ -11,9 +11,11 @@ class Agent::NerveAgent < Agent::GathererAgent
       obj.is_a?(Agent) && obj.player != self.player
     end
     enemy_agents.each do |agent|
-      def agent.action
-        :seizure
-      end
+      inhale(agent)
     end
+  end
+
+  def inhale(agent)
+    raise NotImplementedError, "#{self.class.name} must implement #{__method__}"
   end
 end
