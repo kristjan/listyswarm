@@ -22,11 +22,15 @@ class Universe
 
   def start
     puts "BANG. #{world.rows}x#{world.columns} Universe begins."
-    puts world
     puts "#{armies.size} armies:"
     armies.each do |army|
       puts "\t#{army.first.class.name} (#{army.size})"
     end
+    begin
+      puts nil, world
+      world.tick
+      sleep 0.25
+    end while true
   end
 
   private
