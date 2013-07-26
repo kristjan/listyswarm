@@ -1,6 +1,6 @@
-require 'agent/nerve_agent'
+require 'agent_behavior/nerve_agent'
 
-class Agent::CripplingNerveAgent < Agent::NerveAgent
+class AgentBehavior::CripplingNerveAgent < AgentBehavior::NerveAgent
   private
 
   EFFECTIVENESS = 10

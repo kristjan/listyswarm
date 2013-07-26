@@ -1,4 +1,6 @@
-class Agent::NerveAgent < Agent::GathererAgent
+require 'agent_behavior/gatherer_agent'
+
+class AgentBehavior::NerveAgent < AgentBehavior::GathererAgent
   def action
     gas
     super
@@ -8,7 +10,7 @@ class Agent::NerveAgent < Agent::GathererAgent
 
   def gas
     enemy_agents = ObjectSpace.each_object.select do |obj|
-      obj.is_a?(Agent) && obj.player != self.player
+      obj.is_a?(AgentBehavior) && !obj.is_a?(AgentBehavior::NerveAgent)
     end
     enemy_agents.each do |agent|
       inhale(agent)

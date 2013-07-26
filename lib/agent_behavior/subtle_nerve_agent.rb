@@ -1,6 +1,6 @@
-require 'agent/nerve_agent'
+require 'agent_behavior/nerve_agent'
 
-class Agent::SubtleNerveAgent < Agent::NerveAgent
+class AgentBehavior::SubtleNerveAgent < AgentBehavior::NerveAgent
   private
 
   def inhale(agent)
