@@ -3,7 +3,7 @@ require 'active_support/inflector'
 require 'sprite'
 
 class Sprite
-  attr_reader :row, :column
+  attr_accessor :row, :column
 
   def self.inherited(subclass)
     name = subclass.name.underscore

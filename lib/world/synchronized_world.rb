@@ -79,9 +79,27 @@ class World::SynchronizedWorld < World
     agent.box = nil
   end
 
+  # Modifies the given world to result in the final board after the tick
   def rectify(world)
     fight(world)
     assign_boxes(world)
+    seed_new_boxes(world)
+  end
+
+  def seed_new_boxes(world)
+    @box_droppers.each do |dropper|
+      boxes_to_place = dropper.tick(world)
+      boxes_to_place.each do |box, coords|
+        row, col = coords
+
+        if row.nil? || col.nil?
+          require 'pry'; binding.pry
+        end
+
+        World.add_sprite(world, box, row, col)
+        @boxes << box
+      end
+    end
   end
 
   # Detect contiguous box chains and label them to be "owned" by a player

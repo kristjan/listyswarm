@@ -18,6 +18,14 @@
   "logger": "NullLogger",
   "newline_wait": false,
   "sleep_seconds": 0.1,
-  "random_seed": 1
+  "random_seed": 1,
+  "box_droppers": [
+    {
+      "name": "ClusterDrop",
+      "period": 200,
+      "drop_size": 20,
+      "drop_radius": 2
+    }
+  ]
 
 }

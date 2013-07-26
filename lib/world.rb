@@ -13,8 +13,16 @@ class World
     @players        = []
     @spawn_points   = []
     @boxes          = []
+    @box_droppers = make_box_droppers(options[:box_droppers])
     @world          = build_world
     place_boxes(options[:boxes].to_i)
+  end
+
+  def make_box_droppers(box_droppers)
+    box_droppers.map do |_options|
+      dropper_class = Loader.load_class(:box_dropper, _options['name'])
+      dropper_class.new(_options)
+    end
   end
 
   def [](row, col)
@@ -59,13 +67,26 @@ class World
   end
 
   def self.add_sprite(world_arr, sprite, row, col)
-    sprite.location = [row, col]
+    if row.nil? || col.nil?
+      raise ArgumentError.new
+    end
+
+    sprite.row = row
+    sprite.column = col
+
+    rows = world_arr.length
+    cols = world_arr.first.length
+
+    return false if row < 0 || row >= rows || col < 0 || col >= cols
+
 
     if world_arr[sprite.row][sprite.column].nil?
       world_arr[sprite.row][sprite.column] = []
     else
       world_arr[sprite.row][sprite.column] << sprite
     end
+
+    true
   end
 
   def tick
