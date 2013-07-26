@@ -1,6 +1,6 @@
 class Spawn
   def initialize(options={})
-    @options = options
+    @options = options || {}
   end
 
   def spawn(world, player)

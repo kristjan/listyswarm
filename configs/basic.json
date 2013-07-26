@@ -20,7 +20,11 @@
   "sleep_seconds": 0.1,
   "random_seed": 1,
   "spawn": {
-    "name": "InstantSpawn"
+    "name": "TickSpawn",
+    "params": {
+      "period": 1,
+      "count":  1
+    }
   },
   "log": {
     "enabled": true
