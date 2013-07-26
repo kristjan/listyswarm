@@ -10,8 +10,12 @@ class Agent < Sprite
   end
 
   def can_move?(direction)
+    !near?(Wall, direction)
+  end
+
+  def near?(sprite_class, direction)
     neighbor = Coordinate.neighbor([0, 0], direction)
-    sensors.vision(*neighbor).none?{|sprite| sprite.is_a?(Wall)}
+    sensors.vision(*neighbor).any?{|sprite| sprite.is_a?(sprite_class)}
   end
 
   def has_box?
