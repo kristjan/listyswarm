@@ -6,7 +6,6 @@ class World::SynchronizedWorld < World
     #create a new empty world
     new_world = build_world
 
-
     @spawn_points.each do |point|
       new_world[point.row][point.column] << point
     end
@@ -85,6 +84,7 @@ class World::SynchronizedWorld < World
     assign_boxes(world)
   end
 
+  # Detect contiguous box chains and label them to be "owned" by a player
   def assign_boxes(world)
     @boxes.each{|box| box.owner = nil}
     @spawn_points.each do |spawn|
@@ -108,6 +108,7 @@ class World::SynchronizedWorld < World
   def fight(world)
     world.each do |row|
       row.each do |items|
+
         combatants = items.select do |item|
           item.is_a?(Agent)
         end.group_by(&:player).to_a.sort_by{|player, agents| agents.size}
