@@ -21,7 +21,7 @@ class World
     player.spawn_point = spawn_point
     @world[spawn_point.row][spawn_point.column] << spawn_point
     @players << player
-    place_swarm(player.swarm)
+    place_swarm(player)
   end
 
   def to_s
@@ -73,9 +73,9 @@ class World
     end.to_s
   end
 
-  def place_swarm(swarm)
-    coords = random_coordinates(swarm.size)
-    swarm.zip(coords).each do |agent, (row, col)|
+  def place_swarm(player)
+    row, col = player.spawn_point.location
+    player.swarm.each do |agent|
       @world[row][col] << agent
       agent.location = [row, col]
     end
