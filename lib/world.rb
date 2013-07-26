@@ -35,9 +35,7 @@ class World
 
   def to_s
     "".tap do |out|
-      out << " 0123456789\n"
       @world.each_with_index do |row, i|
-        out << 'abcdefghij'[i]
         row.each do |things|
           out << character_for(things)
         end

@@ -29,7 +29,6 @@ class Universe
     begin
       puts nil, world
       world.tick
-      sleep 0.25
     end while true
   end
 
