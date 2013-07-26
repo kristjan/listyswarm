@@ -16,6 +16,10 @@ class World
     place_boxes(options[:boxes].to_i)
   end
 
+  def [](row, col)
+    @world[row][col]
+  end
+
   def add_player(player)
     spawn_point = pick_spawn_point(@players.size)
     @spawn_points << spawn_point

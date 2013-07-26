@@ -27,4 +27,8 @@ class Victory
     players.each{|player| update_score(player)}
     @winner = players.sort_by(&:score).last
   end
+
+  def world
+    @universe.world
+  end
 end
