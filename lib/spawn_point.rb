@@ -1,5 +1,5 @@
 class SpawnPoint < Sprite
-  attr_reader :row, :column, :name
+  attr_reader :name
 
   def initialize(name, coords)
     @name = name
