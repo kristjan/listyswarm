@@ -10,7 +10,6 @@ class World::SynchronizedWorld < World
       new_world[point.row][point.column] << point
     end
 
-
     @players.each do |player|
       @spawn_behavior.spawn(self, new_world, player)
       player.swarm.each do |agent|
@@ -118,10 +117,15 @@ class World::SynchronizedWorld < World
         if combatants.size > 1
           runner_up, winner = combatants.last(2)
           body_count = runner_up.last.size # agent count
-          killed = combatants.map{|player, agents| agents.first(body_count)}
-          killed.flatten.each do |agent|
+          killed = combatants.map do |player, agents|
+            agents.first(body_count)
+          end.flatten
+          row, col = killed.first.location
+          collision = Collision.new
+          self.class.add_sprite(world, collision, row, col)
+          killed.each do |agent|
             drop_box(world, agent) if agent.has_box?
-            world[agent.row][agent.column].delete(agent) if agent.location
+            world[row][col].delete(agent)
             agent.player.kill(agent)
           end
         end

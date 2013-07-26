@@ -92,7 +92,7 @@ class World
   end
 
   def self.character_for(things)
-    item = sort_things(things).first
+    item = things.sort.last
     if item.is_a?(Sprite)
       item.display_char
     else
