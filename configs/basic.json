@@ -1,10 +1,10 @@
 {
-  "boxes": 20,
-  "rows": 10,
-  "columns": 10,
+  "boxes": 100,
+  "rows": 100,
+  "columns": 250,
   "world": "SynchronizedWorld",
   "vision_radius": 2,
-  "swarm_size": 5,
+  "swarm_size": 100,
   "agents": [
     "RandomAgent",
     "RandomAgent"
@@ -12,8 +12,8 @@
   "victory": {
     "name": "FiniteTimeVictory",
     "params": {
-      "ticks": 100
+      "ticks": 10000
     }
   },
-  "logger": "TextFrameLogger"
+  "logger": "NullLogger"
 }
