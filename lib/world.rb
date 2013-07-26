@@ -90,7 +90,7 @@ class World
 
   def place_box(world, box, row, column)
     box.location = [row, column]
-    @world[box.row][box.column] << box
+    world[box.row][box.column] << box
   end
 
   def place_boxes(count)
