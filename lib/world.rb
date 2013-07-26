@@ -29,15 +29,15 @@ class World
     place_swarm(player)
   end
 
-  def to_s
-    self.class.world_to_s(@world)
+  def to_s(border=true)
+    self.class.world_to_s(@world, border)
   end
 
-  def self.world_to_s(world)
+  def self.world_to_s(world, border=true)
     "".tap do |out|
-      out << '+' + '-' * world.length + "\n"
+      out << '+' + '-' * world.length + "\n" if border
       world.each_with_index do |row, i|
-        out << '|'
+        out << '|' if border
         row.each do |things|
           out << character_for(things)
         end
