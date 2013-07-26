@@ -2,5 +2,9 @@
   "boxes": 5,
   "rows": 10,
   "columns": 10,
-  "world": "SynchronizedWorld"
+  "world": "SynchronizedWorld",
+  "agents": [
+    "RandomAgent",
+    "RandomAgent"
+  ]
 }
