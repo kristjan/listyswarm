@@ -46,5 +46,4 @@ class Universe
   def world_class
     @world_class ||= load_class(:world, options[:world])
   end
-
 end

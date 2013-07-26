@@ -3,7 +3,11 @@
 $:.unshift(File.join(File.dirname(__FILE__), 'lib'))
 
 require 'json'
-require 'universe'
+
+# Require all nested files
+Dir.glob('./lib/*.rb').each do |filename|
+  require filename
+end
 
 filename = ARGV[0]
 

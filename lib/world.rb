@@ -1,7 +1,7 @@
 require 'box'
 
 class World
-  attr_reader :columns, :options, :rows
+  attr_reader :columns, :options, :rows, :world
 
   def initialize(options)
     @options = options
@@ -10,6 +10,7 @@ class World
     @world = build_world
     @swarms = options[:swarms]
     @swarms.each { |swarm| place_swarm(swarm) }
+    @vision_capture = VisionCapture.new(options[:vision_radius])
     place_boxes(options[:boxes].to_i)
   end
 
@@ -34,13 +35,27 @@ class World
   end
 
   def to_s
+    self.class.world_to_s(@world)
+  end
+
+  def self.world_to_s(world)
     "".tap do |out|
-      @world.each_with_index do |row, i|
+      world.each_with_index do |row, i|
         row.each do |things|
           out << character_for(things)
         end
         out << "\n"
       end
+    end
+  end
+
+  # returns the sprites at the row and column.  if the row and column are
+  # outside the range of the world, return a wall.
+  def get_sprites(world_arr, row, col)
+    if row < 0 || col < 0 || row >= @rows || col >= @columns
+      Array.new([Wall.new])
+    else
+      world[row][col]
     end
   end
 
@@ -51,10 +66,14 @@ class World
   private
 
   def build_world
-    Array.new(@rows) { Array.new(@columns) { Array.new } }
+    make_grid(@rows, @columns)
   end
 
-  def character_for(things)
+  def make_grid(row_count, column_count)
+    Array.new(row_count) { Array.new(column_count) { Array.new } }
+  end
+
+  def self.character_for(things)
     item = sort_things(things).first
     char = case item
     when Box then 'b'
@@ -70,7 +89,7 @@ class World
   end
 
   PRECEDENCE = %w[Agent Box NilClass]
-  def sort_things(things)
+  def self.sort_things(things)
     things.sort_by do |thing|
       PRECEDENCE.index(thing.class.name.split('::').first)
     end
