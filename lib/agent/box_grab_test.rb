@@ -1,15 +1,19 @@
 class Agent::BoxGrabTest < Agent
 
+  BIAS_WEIGHT = 3
+
   def action
+    @bias ||= [:horizontal, :none, :vertical].sample
+    @bias_weight ||= rand(5)
+
     # I got a box!
     if sensors.have_box?
-      @had_box = true
       return towards_spawn_point.select{|dir| can_move?(dir)}.shuffle.first
     end
 
     # Can I get a box?
     on_top_of_box = sensors.vision(0, 0).any? {|sprite| sprite.is_a?(Box) }
-    return :pickup_box if on_top_of_box && !sensors.have_box? && !@had_box
+    return :pickup_box if on_top_of_box && !sensors.have_box?
 
     # Let's look for a box
     return away_from_spawn_point.select{|dir| can_move?(dir)}.shuffle.first
@@ -23,7 +27,13 @@ class Agent::BoxGrabTest < Agent
   end
 
   def away_from_spawn_point
-    [:north, :south, :east, :west] - towards_spawn_point
+    dirs = [:north, :south, :east, :west] - towards_spawn_point
+    # Amplify our directional bias
+    case @bias
+    when :none       then dirs
+    when :vertical   then dirs.concat((dirs - [:east, :west]) * @bias_weight)
+    when :horizontal then dirs.concat((dirs - [:north, :south]) * @bias_weight)
+    end
   end
 
 end
