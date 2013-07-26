@@ -45,7 +45,7 @@ class Universe
       world.tick
       @ticks += 1
       @logger.log(self)
-      STDIN.gets if options[:newline_wait]
+      getch if options[:newline_wait]
       sleep(options[:sleep_seconds] || 0)
     end until @victory.done?
     print_screen
