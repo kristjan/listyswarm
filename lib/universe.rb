@@ -1,30 +1,36 @@
 require 'active_support/inflector'
 
 require 'agent'
+require 'loader'
+require 'player'
 require 'world'
 
 class Universe
-  attr_reader :swarms, :options, :world
+  attr_reader :options, :players, :world
 
   TEAM_LABELS = %w[x o s w]
 
   def initialize(options)
     @options = options
-    @agent_brains = options[:agent_brains].map do |agent_name|
-      load_class(:agent, agent_name)
+    @world = world_class.new(options)
+    @players = []
+
+    options[:agents].each_with_index do |agent, i|
+      players << Player.new(
+        agent:      agent,
+        swarm_size: options[:swarm_size],
+        team:       TEAM_LABELS[i],
+      ).tap do |player|
+        @world.add_player(player)
+      end
     end
-    @swarms = []
-    @agent_brains.zip(TEAM_LABELS).each_with_index do |(brain, team), i|
-      swarms[i] = options[:agent_count].to_i.times.map { brain.new(team) }
-    end
-    @world = world_class.new(options.merge(swarms: swarms))
   end
 
   def start
     puts "BANG. #{world.rows}x#{world.columns} Universe begins."
-    puts "#{swarms.size} swarms:"
-    swarms.each do |swarm|
-      puts "\t#{swarm.first.class.name} (#{swarm.size})"
+    puts "#{players.size} players:"
+    players.each do |player|
+      puts "\t#{player.agent.class.name} (#{player.swarm.size})"
     end
 
     puts 'Start:', world, nil
@@ -37,16 +43,7 @@ class Universe
 
   private
 
-  def load_class(prefix, name)
-    class_name = "#{prefix}/#{name.underscore}"
-    @loaded_classes ||= {}
-    @loaded_classes[class_name] ||= begin
-      require class_name
-      Object.const_get(prefix.to_s.camelize).const_get(name.camelize)
-    end
-  end
-
   def world_class
-    @world_class ||= load_class(:world, options[:world])
+    @world_class ||= Loader.load_class(:world, options[:world])
   end
 end
