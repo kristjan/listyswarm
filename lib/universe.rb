@@ -26,9 +26,12 @@ class Universe
     swarms.each do |swarm|
       puts "\t#{swarm.first.class.name} (#{swarm.size})"
     end
+
+    puts 'Start:', world, nil
     begin
-      puts nil, world
       world.tick
+      puts nil, world
+      STDIN.gets
     end while true
   end
 

@@ -40,7 +40,9 @@ class World
 
   def self.world_to_s(world)
     "".tap do |out|
+      out << '+' + '-' * world.length + "\n"
       world.each_with_index do |row, i|
+        out << '|'
         row.each do |things|
           out << character_for(things)
         end
@@ -78,6 +80,7 @@ class World
     char = case item
     when Box then 'b'
     when Agent then item.team
+    when Wall then '#'
     else ' '
     end.to_s
   end

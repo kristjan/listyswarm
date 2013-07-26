@@ -22,7 +22,6 @@ class World::SynchronizedWorld < World
 
     # TODO: vision should be a part of a larger sensor suite
     vision = @vision_capture.generate_vision(self, agent)
-    #puts World.world_to_s(vision)
 
     action = agent.action({:vision => vision})
 
