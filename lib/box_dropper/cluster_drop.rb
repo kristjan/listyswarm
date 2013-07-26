@@ -14,7 +14,6 @@ class BoxDropper::ClusterDrop < BoxDropper
       row = Universe::RNG.rand(world.length)
       col = Universe::RNG.rand(world.first.length)
 
-      puts "Dropping #{@drop_size} boxes at #{[row, col]}"
       offsets = random_offsets(@drop_radius, @drop_size)
 
       boxes_to_make = offsets.map do |row_offset, col_offset|
