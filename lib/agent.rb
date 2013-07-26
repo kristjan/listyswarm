@@ -2,11 +2,16 @@ require 'sprite'
 
 class Agent < Sprite
   attr_reader :id, :player
-  attr_accessor :box
+  attr_accessor :box, :sensors
 
   def initialize(player, id)
     @player = player
     @id = id
+  end
+
+  def can_move?(direction)
+    neighbor = Coordinate.neighbor([0, 0], direction)
+    sensors.vision(*neighbor).none?{|sprite| sprite.is_a?(Wall)}
   end
 
   def has_box?
@@ -25,8 +30,12 @@ class Agent < Sprite
     has_box? ? 11 : 10
   end
 
-  def action(state)
+  def action
     raise NotImplementedError, "#{self.class.name} must implement #{__method__}"
+  end
+
+  def spawn_point
+    player.spawn_point
   end
 
   def team

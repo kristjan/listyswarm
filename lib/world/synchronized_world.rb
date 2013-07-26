@@ -34,11 +34,9 @@ class World::SynchronizedWorld < World
     row, col = [agent.row, agent.column]
     old_row, old_col = [row, col]
 
-    sensors = Sensors.create(self, agent)
+    agent.sensors = Sensors.create(self, agent)
 
-    action = agent.action(sensors)
-
-    case action
+    case agent.action
     when :north
       row -= 1 unless row == 0
     when :south

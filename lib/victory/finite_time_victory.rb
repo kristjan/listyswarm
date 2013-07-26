@@ -1,5 +1,7 @@
 require 'set'
 
+require 'coordinate'
+
 class Victory::FiniteTimeVictory < Victory
   def initialize(players, options={})
     super
@@ -17,8 +19,6 @@ class Victory::FiniteTimeVictory < Victory
 
   private
 
-  DIRECTIONS = [:north, :south, :east, :west]
-
   def longest_chain(coord, visited=Set.new)
     row, col = coord
     return 0 if row < 0              ||
@@ -31,23 +31,12 @@ class Victory::FiniteTimeVictory < Victory
 
     return 0 unless world[row, col].detect{|item| item.is_a?(Box)}
 
-    longest = 1 + DIRECTIONS.map do |dir|
-      longest_chain(neighbor(coord, dir), visited)
+    longest = 1 + Coordinate.DIRECTIONS.map do |dir|
+      longest_chain(Coordinate.neighbor(coord, dir), visited)
     end.max
 
     visited.delete coord
     longest
   end
 
-  def neighbor(coord, direction)
-    row, col = coord
-    case direction
-    when :north then [row - 1, col]
-    when :south then [row + 1, col]
-    when :east then  [row, col + 1]
-    when :west then  [row, col - 1]
-    else
-      raise "Unknown direction #{direction}"
-    end
-  end
 end

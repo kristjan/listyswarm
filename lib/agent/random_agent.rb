@@ -1,5 +1,5 @@
 class Agent::RandomAgent < Agent
-  def action(state)
+  def action
     [:north, :south, :east, :west].shuffle.first
   end
 end
