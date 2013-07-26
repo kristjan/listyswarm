@@ -3,6 +3,7 @@ require 'curses'
 
 require 'agent'
 require 'loader'
+require 'log'
 require 'player'
 require 'world'
 
@@ -19,6 +20,7 @@ class Universe
     @world = world_class.new(options)
     @ticks = 0
     @players = []
+    Log.options = options[:log]
 
     options[:agent_behaviors].each_with_index do |agent_behavior, i|
       players << Player.new(
@@ -41,6 +43,7 @@ class Universe
     init_screen
     crmode
     begin
+      Log.log("Tick #{@ticks}")
       print_screen
       world.tick
       @ticks += 1
