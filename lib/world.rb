@@ -1,3 +1,5 @@
+require 'set'
+
 require 'box'
 
 class World
@@ -23,6 +25,7 @@ class World
     spawn_point = pick_spawn_point(@players.size)
     @spawn_points << spawn_point
     player.spawn_point = spawn_point
+    spawn_point.player = player
     @world[spawn_point.row][spawn_point.column] << spawn_point
     @players << player
     place_swarm(player)
@@ -83,7 +86,7 @@ class World
   end
 
   def make_grid(row_count, column_count)
-    Array.new(row_count) { Array.new(column_count) { Array.new } }
+    Array.new(row_count) { Array.new(column_count) { Set.new } }
   end
 
   def self.character_for(things)

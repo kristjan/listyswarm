@@ -1,3 +1,5 @@
+require 'active_support/inflector'
+
 require 'sprite'
 
 class Sprite

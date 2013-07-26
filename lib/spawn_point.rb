@@ -1,5 +1,6 @@
 class SpawnPoint < Sprite
   attr_reader :name
+  attr_accessor :player
 
   def initialize(name, coords)
     @name = name

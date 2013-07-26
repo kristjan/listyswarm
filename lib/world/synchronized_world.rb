@@ -30,13 +30,15 @@ class World::SynchronizedWorld < World
   end
 
   private
+
   def perform_action(new_world, agent)
     row, col = [agent.row, agent.column]
     old_row, old_col = [row, col]
 
     agent.sensors = Sensors.create(self, agent)
 
-    case agent.action
+    action = agent.action
+    case action
     when :north
       row -= 1 unless row == 0
     when :south
@@ -67,6 +69,7 @@ class World::SynchronizedWorld < World
     if !box.nil?
       box.is_held = true
       agent.box = box
+      box.owner = nil # Only owned when part of your chain
     end
   end
 
@@ -79,6 +82,31 @@ class World::SynchronizedWorld < World
   end
 
   def rectify(world)
+    fight(world)
+    assign_boxes(world)
+  end
+
+  def assign_boxes(world)
+    @boxes.each{|box| box.owner = nil}
+    @spawn_points.each do |spawn|
+      assign_box_chain(world, spawn.location, spawn.player)
+    end
+  end
+
+  def assign_box_chain(world, coord, player)
+    row, col = coord
+    return if row < 0 || col < 0 || row >= @rows || col >= @columns
+
+    boxes = world[row][col].select(&:box?).select{|box| box.owner.nil?}
+    return if boxes.empty?
+
+    boxes.each {|box| box.owner = player}
+    Coordinate::DIRECTIONS.each do |direction|
+      assign_box_chain(world, Coordinate.neighbor(coord, direction), player)
+    end
+  end
+
+  def fight(world)
     world.each do |row|
       row.each do |items|
         combatants = items.select do |item|

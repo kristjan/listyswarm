@@ -1,5 +1,5 @@
 class Box < Sprite
-  attr_accessor :is_held
+  attr_accessor :is_held, :owner
 
   def initialize
     @is_held = false
@@ -15,5 +15,10 @@ class Box < Sprite
 
   def display_priority
     5
+  end
+
+  def owned_by?(representative)
+    representative = representative.player if representative.is_a?(Agent)
+    owner == representative
   end
 end
