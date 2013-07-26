@@ -20,11 +20,15 @@ class Victory
     player.score = score(player)
   end
 
+  def update_scores
+    players.each{|player| update_score(player)}
+  end
+
   def winners
     return @winners if @winners
     return nil unless done?
 
-    players.each{|player| update_score(player)}
+    update_scores
     high_score = players.map(&:score).max
     @winners = players.select{|player| player.score == high_score}
   end

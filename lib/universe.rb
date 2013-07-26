@@ -1,4 +1,5 @@
 require 'active_support/inflector'
+require 'curses'
 
 require 'agent'
 require 'loader'
@@ -6,6 +7,8 @@ require 'player'
 require 'world'
 
 class Universe
+  include Curses
+
   attr_reader :options, :players, :ticks, :world
 
   TEAM_LABELS = %w[x o s w]
@@ -34,33 +37,55 @@ class Universe
   end
 
   def start
-    puts "BANG. #{world.rows}x#{world.columns} Universe begins."
-    puts "#{players.size} players:"
-    players.each do |player|
-      puts "\t#{player.agent.class.name} (#{player.swarm.size})"
-    end
-
-    puts 'Start', world, nil
+    init_screen
+    crmode
     begin
+      print_screen
       world.tick
       @ticks += 1
-      `clear`
-      puts nil, "Tick #{@ticks}", world
       @logger.log(self)
     end until @victory.done?
-    winners = @victory.winners
-    puts winners.size > 1 ? "It's a tie!" : "We have a winner!"
+    print_screen
+    getch
+  end
+
+  private
+
+  def build_header
+    top_line = "Tick #{@ticks}"
+
+    @victory.update_scores
+    if @victory.done?
+      winners = @victory.winners
+      top_line << ' - ' + (winners.size > 1 ? "It's a tie!" : "We have a winner!")
+    end
+
+    lines = [top_line]
+
     max_agent_length = @players.map{|player| player.agent.name.length}.max
     @players.sort_by{|player| -player.score}.each do |player|
-      puts [
+      lines << [
         player.team,
         player.agent.name.ljust(max_agent_length + 2),
         player.score.to_s.rjust(5)
       ].join(' ')
     end
+
+    lines
   end
 
-  private
+  def print_screen
+    setpos(0, 0)
+    addstr(world.to_s)
+    header = build_header
+    display_height = (@world.rows - header.size) / 2
+    header.each_with_index do |line, i|
+      setpos(display_height + i, @world.columns + 10)
+      addstr(line)
+    end
+    setpos(@world.rows + 1, @world.columns + 1)
+    refresh
+  end
 
   def world_class
     @world_class ||= Loader.load_class(:world, options[:world])
