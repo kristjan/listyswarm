@@ -8,12 +8,13 @@ class Agent::BoxGrabTest < Agent
 
     # I got a box!
     if sensors.have_box?
+      return :drop_box if on_spawn_point?
       return towards_spawn_point.select{|dir| can_move?(dir)}.shuffle.first
     end
 
     # Can I get a box?
     on_top_of_box = sensors.vision(0, 0).any? {|sprite| sprite.is_a?(Box) }
-    return :pickup_box if on_top_of_box && !sensors.have_box?
+    return :pickup_box if !sensors.have_box? && on_top_of_box && !on_spawn_point?
 
     # Let's look for a box
     return away_from_spawn_point.select{|dir| can_move?(dir)}.shuffle.first

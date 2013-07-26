@@ -38,6 +38,10 @@ class Agent < Sprite
     player.spawn_point
   end
 
+  def on_spawn_point?
+    sensors.vision(0, 0).detect{|sprite| sprite == spawn_point}
+  end
+
   def team
     player.team
   end
