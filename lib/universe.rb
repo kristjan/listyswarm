@@ -6,13 +6,15 @@ require 'player'
 require 'world'
 
 class Universe
-  attr_reader :options, :players, :world
+  attr_reader :options, :players, :ticks, :world
 
   TEAM_LABELS = %w[x o s w]
 
   def initialize(options)
+    puts options.inspect
     @options = options
     @world = world_class.new(options)
+    @ticks = 0
     @players = []
 
     options[:agents].each_with_index do |agent, i|
@@ -24,6 +26,10 @@ class Universe
         @world.add_player(player)
       end
     end
+
+    @victory = Loader.load_class(:victory,
+      options[:victory][:name]
+    ).new(self, options[:victory][:params])
   end
 
   def start
@@ -33,12 +39,13 @@ class Universe
       puts "\t#{player.agent.class.name} (#{player.swarm.size})"
     end
 
-    puts 'Start:', world, nil
+    puts 'Start', world, nil
     begin
       world.tick
-      puts nil, world
-      STDIN.gets
-    end while true
+      @ticks += 1
+      puts nil, "Tick #{@ticks}", world
+    end until @victory.done?
+    puts "#{@victory.winner.team} wins! #{@victory.winner.score}"
   end
 
   private

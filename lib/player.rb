@@ -2,6 +2,7 @@ require 'loader'
 
 class Player
   attr_reader :agent, :spawn_point, :swarm, :team
+  attr_accessor :score
 
   def initialize(options)
     @team = options[:team]
