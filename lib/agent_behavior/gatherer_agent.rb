@@ -1,7 +1,7 @@
 class AgentBehavior::GathererAgent < AgentBehavior
   def action
     @bias ||= [:horizontal, :none, :vertical].sample
-    @bias_weight ||= rand(5)
+    @bias_weight ||= Universe::RNG.rand(5)
 
     # I got a box!
     if sensors.have_box?
@@ -11,10 +11,8 @@ class AgentBehavior::GathererAgent < AgentBehavior
 
     # I'm on a box!
     on_top_of_box = sensors.vision(0, 0).select(&:box?).any? do |box|
-      puts "owned by self: #{box.owned_by?(self)}"
       !box.owned_by?(self)
     end
-    puts "on_top_of_box: #{on_top_of_box}"
     if !sensors.have_box? && on_top_of_box
       return :pickup_box
     end

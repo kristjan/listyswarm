@@ -15,6 +15,7 @@ class Universe
 
   def initialize(options)
     @options = options
+    self.class.const_set('RNG', Random.new(options[:random_seed]))
     @world = world_class.new(options)
     @ticks = 0
     @players = []
@@ -45,6 +46,7 @@ class Universe
       @ticks += 1
       @logger.log(self)
       STDIN.gets if options[:newline_wait]
+      sleep(options[:sleep_seconds] || 0)
     end until @victory.done?
     print_screen
     getch
@@ -63,7 +65,7 @@ class Universe
 
     lines = [top_line]
 
-    max_agent_length = @players.map{|player| player.agent.name.length}.max
+    max_agent_length = @players.map{|player| player.agent_behavior.name.length}.max
     @players.sort_by{|player| -player.score}.each do |player|
       lines << [
         player.team,
