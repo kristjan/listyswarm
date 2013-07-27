@@ -71,7 +71,8 @@ class Universe
   private
 
   def build_header
-    @victory.update_scores
+    update_frequency = options.fetch(:score_update_frequency, 1).to_i
+    @victory.update_scores if @ticks % update_frequency == 0
 
     max_agent_length = @players.map{|player| player.agent_behavior.name.length}.max
     header = %w[Team Behavior Agents Score]
