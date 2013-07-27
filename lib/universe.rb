@@ -55,6 +55,19 @@ class Universe
     getch
   end
 
+  def game_stats
+    {}.tap do |stats|
+      stats[:tick] = @ticks
+      @players.each do |player|
+        stats[player.team] = {
+          agent: player.agent_behavior.name,
+          swarm: player.swarm.size,
+          score: player.score
+        }
+      end
+    end
+  end
+
   private
 
   def build_header
@@ -64,19 +77,23 @@ class Universe
     header = %w[Team Behavior Agents Score]
     widths = [6, max_agent_length + 2, 8, 7]
 
+    stats = game_stats
+
     lines = []
     lines << header.zip(widths).map {|data, width| data.to_s.ljust(width)}
-    @players.sort_by{|player| -player.score}.each do |player|
+    @players.sort_by{|player| -stats[player.team][:score]}.each do |player|
+      team = player.team
       lines << [
-        player.team,
-        player.agent_behavior.name,
-        player.swarm.size,
-        player.score.to_s,
+        team,
+        stats[team][:agent],
+        stats[team][:swarm],
+        stats[team][:score]
       ].zip(widths).map do |data, width|
         data.to_s.ljust(width)
       end
     end
-    top_line = "Tick #{@ticks}"
+
+    top_line = "Tick #{stats[:tick]}"
     if @victory.done?
       winners = @victory.winners
       top_line << ' - ' + (winners.size > 1 ? "It's a tie!" : "We have a winner!")
