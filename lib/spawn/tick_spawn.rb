@@ -17,6 +17,7 @@ class Spawn::TickSpawn < Spawn
     if ready && player.spawn_queue.any?
       @options.fetch(:count, 1).times do
         agent = player.spawn_queue.pop
+        break unless agent
         world.class.respawn(new_world, agent)
         player.spawn(agent)
       end
