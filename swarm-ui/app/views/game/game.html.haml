@@ -1,0 +1,9 @@
+#controls.clear
+  .tick.right= @tick
+  - if @continue_url
+    .continue{ data: { url: @continue_url } }
+  = link_to "restart", @restart_url, class: 'button left'
+
+%canvas#game
+
+#game-data{ data: { tick: 0, game_id: @game_id, max_ticks: @max_ticks } }
