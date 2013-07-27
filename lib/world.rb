@@ -134,9 +134,7 @@ class World
   end
 
   def random_coordinates(count)
-    row_coords = (0...@rows).to_a.shuffle
-    col_coords = (0...@columns).to_a.shuffle
-    row_coords.zip(col_coords).first(count)
+    count.times.map { [rand(@rows), rand(@columns)] }
   end
 
   SPAWN_LABELS = (1..4).to_a
