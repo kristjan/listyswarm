@@ -20,3 +20,5 @@ doc/
 # Game artifacts
 games/
 game.log
+*~
+.rvmrc
