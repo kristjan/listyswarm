@@ -1,9 +1,8 @@
 #stats.clear
   .tick.right= 0
   .players
-    - ['x', 'o', 's', 'w'].reverse_each do |player|
+    - ['x', 'o', 's', 'w'].each do |player|
       = render 'game/shared/player', :player => player
-  = link_to "restart", @restart_url, class: 'button left'
 
 %canvas#game
 

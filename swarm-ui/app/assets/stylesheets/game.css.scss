@@ -24,19 +24,29 @@ body {
 
   .players {
     font-size: 12px;
-    float: right;
-    width: 600px;
+    float: left;
+    width: 800px;
     
-    .player {  
-      float: right;
-      width: 125px;
+    .player {
+      display: none;
+      float: left;
+      width: 175px;
       margin-right: 10px;
 
+      .swarm, .score {
+        float: left;
+        width: 85px;
+        text-align: center;
+      }
+
       .team {
-        text-transform: uppercase;
         color: #fff;
         padding: 5px;
+        font-weight: bold;
+        text-align: center;
+        font-size: 18px;
       }
+
       &.player-x .team { background-color: #c80000; }
       &.player-o .team { background-color: #0000c8; }
       &.player-s .team { background-color: #ff80aa; }
