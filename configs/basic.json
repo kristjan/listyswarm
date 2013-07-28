@@ -10,7 +10,7 @@
     "GathererAgent"
   ],
   "victory": {
-    "name": "FiniteTimeVictory",
+    "name": "FurthestBranchVictory",
     "params": {
       "ticks": 10000
     }
@@ -18,7 +18,7 @@
 
   "logger": "NullLogger",
   "newline_wait": false,
-  "sleep_seconds": 0.1,
+  "sleep_seconds": 0.001,
   "random_seed": 1,
   "box_droppers": [
     {

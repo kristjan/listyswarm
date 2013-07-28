@@ -156,4 +156,32 @@ class World
     end
   end
 
+  # Finds the set of all sprites of the same type
+  def find_contiguous(row, col, sprite_type, no_dup = true)
+    horizon = []
+    explored = Set.new
+    result = []
+
+    while !horizon.empty?
+      coord = horizon.pop
+      explored << coord
+
+      sprites = world[row][col].select {|s| is_a?(sprite_type) }
+      next if sprites.length == 0
+
+      # add the current
+      if no_dup
+        result += sprites
+      else
+        result << sprites.first
+      end
+
+      Coordinate::DIRECTIONS.each do |dir|
+        next_coord = Coordinate.neighbor(coord, dir)
+        horizon << next_coord
+      end
+    end
+
+  end
+
 end

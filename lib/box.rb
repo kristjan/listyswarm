@@ -10,7 +10,13 @@ class Box < Sprite
   end
 
   def display_char
-    'b'
+    if owner.nil?
+      'b'
+    elsif owner.team == 'x'
+      '.'
+    else
+      ','
+    end
   end
 
   def display_priority
