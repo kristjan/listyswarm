@@ -118,6 +118,14 @@ class Universe
     refresh
   end
 
+  def self.debug_lines=(lines)
+    @debug_lines = lines
+  end
+
+  def self.debug_lines
+    @debug_lines
+  end
+
   def world_class
     @world_class ||= Loader.load_class(:world, options[:world])
   end
