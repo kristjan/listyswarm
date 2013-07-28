@@ -89,10 +89,11 @@ class window.Swarm
     $('#stats .tick').text(this.data.tick)
     _(this.data.players).each (player)->
       $player = $(".players .player-#{ player.char }")
-      $player.find('.agent').text(player.agent)
-      $player.find('.score').text(player.score)
-      $player.find('.swarm').text(player.swarm)
-      $player.find('.team').text("Team #{ player.color }")
+      $player.show()
+      #$player.find('.agent').text(player.agent)
+      $player.find('.score .value').text(player.score)
+      $player.find('.swarm .value').text(player.swarm)
+      $player.find('.team').text(player.agent)
 
   nextTick: ->
     if this.data.tick < this.data.max_ticks
