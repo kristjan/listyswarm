@@ -10,7 +10,7 @@ require 'world'
 class Universe
   include Curses
 
-  attr_reader :options, :players, :ticks, :world
+  attr_reader :options, :players, :ticks, :world, :debug_str
 
   TEAM_LABELS = %w[x o s w]
 
@@ -42,9 +42,11 @@ class Universe
   def start
     init_screen
     crmode
+
     begin
       Log.log("Tick #{@ticks}")
       print_screen
+      Universe.clear_debug
       world.tick
       @ticks += 1
       @logger.log(self)
@@ -109,10 +111,15 @@ class Universe
   def print_screen
     setpos(0, 0)
     addstr(world.to_s)
-    info_lines = build_header
-    info_lines += self.class.debug_lines || []
-    display_height = (@world.rows - info_lines.size) / 2
-    (info_lines).each_with_index do |line, i|
+    sidebar_lines = build_header
+
+    #print debug info on the side column
+    if Universe.debug_str
+      sidebar_lines += Universe.debug_str.split("\n")
+    end
+
+    display_height = [(@world.rows - sidebar_lines.size) / 2, 0].max
+    sidebar_lines.each_with_index do |line, i|
       setpos(display_height + i, @world.columns + 10)
       addstr(line)
     end
@@ -120,12 +127,16 @@ class Universe
     refresh
   end
 
-  def self.debug_lines=(lines)
-    @debug_lines = lines
+  def self.clear_debug
+    Universe.debug_str = nil
   end
 
-  def self.debug_lines
-    @debug_lines
+  def self.debug_str=(str)
+    @debug_str = str
+  end
+
+  def self.debug_str
+    @debug_str ||= ''
   end
 
   def world_class

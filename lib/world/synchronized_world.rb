@@ -36,7 +36,7 @@ class World::SynchronizedWorld < World
     old_row, old_col = [row, col]
 
     agent.agent_behavior.sensors = Sensors.create(self, agent)
-    action = agent.agent_behavior.action
+    action = agent.agent_behavior.perform_action
     case action
     when :north
       row -= 1 unless row == 0
@@ -92,10 +92,6 @@ class World::SynchronizedWorld < World
       boxes_to_place = dropper.tick(world)
       boxes_to_place.each do |box, coords|
         row, col = coords
-
-        if row.nil? || col.nil?
-          require 'pry'; binding.pry
-        end
 
         World.add_sprite(world, box, row, col)
         @boxes << box
