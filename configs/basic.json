@@ -1,10 +1,10 @@
 {
-  "boxes": 20,
-  "rows": 30,
-  "columns": 50,
+  "boxes": 10,
+  "rows": 20,
+  "columns": 20,
   "world": "SynchronizedWorld",
   "vision_radius": 2,
-  "swarm_size": 3,
+  "swarm_size": 10,
   "agent_behaviors": [
     "GathererAgent",
     "GathererAgent"
@@ -23,7 +23,7 @@
   "box_droppers": [
     {
       "name": "ClusterDrop",
-      "period": 100,
+      "period": 50,
       "drop_size": 20,
       "drop_radius": 1
     }

@@ -10,7 +10,7 @@ require 'world'
 class Universe
   include Curses
 
-  attr_reader :options, :players, :ticks, :world, :debug_str
+  attr_reader :options, :players, :ticks, :world
 
   TEAM_LABELS = %w[x o s w]
 
