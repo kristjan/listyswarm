@@ -1,14 +1,13 @@
 {
-  "boxes": 5,
+  "boxes": 20,
   "rows": 30,
-  "columns": 30,
+  "columns": 50,
   "world": "SynchronizedWorld",
   "vision_radius": 2,
-  "swarm_size": 1,
+  "swarm_size": 3,
   "agent_behaviors": [
     "GathererAgent",
     "GathererAgent"
-
   ],
   "victory": {
     "name": "FiniteTimeVictory",

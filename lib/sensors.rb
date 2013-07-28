@@ -1,12 +1,14 @@
 class Sensors
   attr_accessor :vision_array, :vision_radius, :has_box,
-    :foe_teams, :friendly_spawn_dir, :foe_spawn_dirs, :spawn_point
+    :foe_teams, :friendly_spawn_dir, :foe_spawn_dirs, :spawn_point,
+    :agent_id
 
   # Generates the hash that is given to the behavior function
   def self.create(world, agent)
     @vision_capture ||= VisionCapture.new(world.options[:vision_radius])
 
-    #TODO: include direction towards home spawn and (maybe) other teams spawns
+    # any data that, for the purposes of fairness, needs to be cleaned or
+    # precomputed should be passed in the init.  the rest should just
     Sensors.new({
       :vision_radius => world.options[:vision_radius],
       :vision_array => @vision_capture.generate_vision(world, agent),
@@ -15,7 +17,7 @@ class Sensors
       :friendly_spawn_dir => direction_of(agent, agent.spawn_point),
       :foe_spawn_dirs => world.players.select{|p| p != agent.player}.
         reduce({}) {|memo, player| memo[player.team] = direction_of(agent, player.spawn_point); memo},
-
+      :agent_id => agent.id,
       #deprecated: don't use spawn point
       :spawn_point => agent.spawn_point
     })
@@ -72,7 +74,7 @@ class Sensors
     (vision_array.first.length / 2.0).floor
   end
 
-  def put_vision
-    puts "---Vision\n" + World.world_to_s(vision_array)
+  def vision_to_s
+    "---Vision\n" + World.world_to_s(vision_array)
   end
 end

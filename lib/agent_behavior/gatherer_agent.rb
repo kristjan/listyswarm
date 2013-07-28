@@ -3,12 +3,12 @@ class AgentBehavior::GathererAgent < AgentBehavior
     @bias ||= [:horizontal, :none, :vertical].sample
     @bias_weight ||= Universe::RNG.rand(5)
 
-    Universe.debug_lines = []
-    Universe.debug_lines << "friendly spawn dir: #{sensors.friendly_spawn_dir}"
+    add_debug("friendly spawn dir: #{sensors.friendly_spawn_dir}\n")
     sensors.foe_spawn_dirs.keys.map do |team|
-      Universe.debug_lines << "enemy dir: #{sensors.foe_spawn_dirs[team]}"
+      add_debug("enemy dir: #{sensors.foe_spawn_dirs[team]}\n")
     end
 
+    add_debug(sensors.vision_to_s)
 
     # I got a box!
     if sensors.have_box?
