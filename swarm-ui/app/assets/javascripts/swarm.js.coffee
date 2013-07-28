@@ -21,7 +21,8 @@ class window.Swarm
     this.nextTick()
 
   drawBoard: (response)=>
-    this.data.board = response
+    this.parseGameFile(response)
+    this.updateStats()
 
     this.ctx.restore
     this.ctx.save
@@ -30,28 +31,49 @@ class window.Swarm
     ch = this.cellHeight
     sp = this.cellSpacing
 
-    _(this.data.board.split("\n")).each (row, rindex)=>
+    _(this.data.board).each (row, rindex)=>
       _(row.split('')).each (col, cindex)=>
         x = cw * cindex + (sp * cindex)
         y = ch * rindex + (sp * rindex)
         this.drawCell(col, x, y, cw, ch)
 
-    this.updateStats()
-    this.updateGameData()
-
     setTimeout (=> this.nextTick()), this.tickInterval
+
+  parseGameFile: (file)->
+    board   = file.split("\n")
+    summary = JSON.parse(board.shift())
+
+    this.data.summary = summary
+    this.data.tick    = summary.tick
+    this.data.board   = board
+    this.data.players   = []
+
+    colors = ['red', 'blue', 'pink', 'green']
+    _(['x','o','s','w']).each (object)=>
+      if summary[object]
+        player =
+          char:  object
+          color: colors.shift()
+          swarm: summary[object].swarm
+          score: summary[object].score
+          agent: this.agentName(summary[object].agent)
+        
+        this.data.players.push(player)
+
+  agentName: (name)->
+    name.split('::')[1]
 
   drawCell: (object, x, y, cw, ch)->
     switch object
-      when 'x', 'X'
+      when 'x', 'X' #red
         this.ctx.fillStyle = "rgb(200, 0, 0)"
-      when 'o', 'O'
+      when 'o', 'O' #blue
         this.ctx.fillStyle = "rgb(0, 0, 200)"
-      when 's', 'S'
+      when 's', 'S' #pink
         this.ctx.fillStyle = "rgb(255, 128, 170)"
-      when 'w', 'W'
-        this.ctx.fillStyle = "rgb(0, 255, 0)"
-      when '1', '2', '3', '4'
+      when 'w', 'W' #green
+        this.ctx.fillStyle = "rgb(0, 200, 0)"
+      when '1', '2', '3', '4' #yellow
         this.ctx.fillStyle = "rgb(255, 255, 0)"
       else
         this.ctx.fillStyle = "rgb(0, 0, 0)"
@@ -64,10 +86,13 @@ class window.Swarm
       this.ctx.strokeRect(x+1, y+1, cw-2, ch-2)
 
   updateStats: ->
-    $('#controls .tick').text(this.data.tick + 1)
-
-  updateGameData: ->
-    this.data.tick += 1
+    $('#stats .tick').text(this.data.tick)
+    _(this.data.players).each (player)->
+      $player = $(".players .player-#{ player.char }")
+      $player.find('.agent').text(player.agent)
+      $player.find('.score').text(player.score)
+      $player.find('.swarm').text(player.swarm)
+      $player.find('.team').text("Team #{ player.color }")
 
   nextTick: ->
     if this.data.tick < this.data.max_ticks
