@@ -1,8 +1,11 @@
 class window.Swarm
   constructor: ->
-    this.$canvas        = $('#game')
+    this.$game          = $('#game')
+    this.$stats         = $('#stats')
+    this.$progress      = $('.progress')
+    this.$canvas        = $('#board')
     this.canvas         = this.$canvas.get(0)
-    this.canvas.width   = window.innerWidth
+    this.canvas.width   = this.boardWidth()
     this.canvas.height  = window.innerHeight
 
     this.game           = {}
@@ -19,6 +22,10 @@ class window.Swarm
 
   run: ->
     this.nextTick()
+
+  boardWidth: ->
+    window.innerWidth - this.$stats.innerWidth() - 25
+
 
   drawBoard: (response)=>
     this.parseGameFile(response)
@@ -86,7 +93,10 @@ class window.Swarm
       this.ctx.strokeRect(x+1, y+1, cw-2, ch-2)
 
   updateStats: ->
-    $('#stats .tick').text(this.data.tick)
+    progress = (this.data.tick / this.data.max_ticks)
+    progress = Math.ceil(progress * 100)
+    this.$progress.css('width', "#{progress}%")
+
     _(this.data.players).each (player)->
       $player = $(".players .player-#{ player.char }")
       $player.show()

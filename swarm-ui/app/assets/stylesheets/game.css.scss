@@ -1,50 +1,101 @@
 // Place all the styles related to the Game controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-
+html { height: 100% }
 body {
   margin: 0;
+  height: 100%;
   background-color: #000;
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", sans-serif;
 }
 
-#game { padding: 10px; }
+#game { 
+  float: left;
+}
 
 #stats {
-  border-bottom: 1px solid #444;
+  float: right;
+  width: 250px;
+  height: 100%;
+  border-left: 1px solid #444;
   background-color: #333;
-  padding: 8px;
   margin: 0 auto;
   color: #fff;
+  text-shadow: 1px 1px 1px #000;
 
-  .tick {
-    font-size: 32px;
-    font-weight: bold;
+  .game {
+    padding: 10px;
+    height: 55px;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 10px;
+
+    .game-id {
+    }
+
+    .progress-bar-container {
+      margin: 0 auto;
+      margin-top: 10px;
+      width: 80%;
+      border: 1px solid #666;
+      background-color: #000;
+      border-radius: 5px;
+      padding: 1px;
+      box-shadow: 0 0 3px #111;
+
+      .progress {
+        width: 0%;
+        height: 10px;
+        border-radius: 3px;
+        background-image: -moz-linear-gradient(bottom, rgb(4,40,112) 7%, rgb(76,165,237) 89%);
+        background-image: -webkit-linear-gradient(bottom, rgb(4,40,112) 7%, rgb(76,165,237) 89%);
+      }
+    }
+  }
+
+  .controls {
+    padding: 40px;
+    border: 1px dashed #999;
+    text-align: center;
+    margin: 10px 0;
   }
 
   .players {
     font-size: 12px;
-    float: left;
-    width: 800px;
     
     .player {
       display: none;
-      float: left;
-      width: 175px;
-      margin-right: 10px;
+      margin: 10px 0;
 
-      .swarm, .score {
+      .photo {
         float: left;
-        width: 85px;
-        text-align: center;
+        width: 75px;
+        height: 75px;
+        border: 1px solid #fff;
+        margin-left: 10px;
       }
 
-      .team {
-        color: #fff;
-        padding: 5px;
-        font-weight: bold;
-        text-align: center;
-        font-size: 18px;
+      .info {
+
+        .swarm, .score, .agent, .team {
+          float: left;
+          width: 147px;
+          text-align: center;
+        }
+
+        .swarm, .score {
+          margin-top: 5px;
+          width: 78px;
+          .value { font-size: 24px; }
+        }
+
+        .team {
+          color: #fff;
+          padding: 5px;
+          text-align: center;
+          font-size: 13px;
+        }
+
       }
 
       &.player-x .team { background-color: #c80000; }
