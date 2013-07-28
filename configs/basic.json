@@ -1,13 +1,14 @@
 {
-  "boxes": 20,
+  "boxes": 5,
   "rows": 30,
   "columns": 30,
   "world": "SynchronizedWorld",
   "vision_radius": 2,
-  "swarm_size": 50,
+  "swarm_size": 1,
   "agent_behaviors": [
     "GathererAgent",
     "GathererAgent"
+
   ],
   "victory": {
     "name": "FiniteTimeVictory",
@@ -15,6 +16,7 @@
       "ticks": 10000
     }
   },
+
   "logger": "NullLogger",
   "newline_wait": false,
   "sleep_seconds": 0.1,
@@ -22,9 +24,9 @@
   "box_droppers": [
     {
       "name": "ClusterDrop",
-      "period": 200,
+      "period": 100,
       "drop_size": 20,
-      "drop_radius": 2
+      "drop_radius": 1
     }
   ],
   "spawn": {

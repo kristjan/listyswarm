@@ -1,5 +1,6 @@
 class Sensors
-  attr_accessor :vision_array, :vision_radius, :has_box, :foe_teams, :friendly_spawn_dir, :spawn_point
+  attr_accessor :vision_array, :vision_radius, :has_box,
+    :foe_teams, :friendly_spawn_dir, :foe_spawn_dirs, :spawn_point
 
   # Generates the hash that is given to the behavior function
   def self.create(world, agent)
@@ -12,6 +13,8 @@ class Sensors
       :has_box => agent.has_box?,
       :foe_teams => world.players.select{|p| p != agent.player}.map(&:team),
       :friendly_spawn_dir => direction_of(agent, agent.spawn_point),
+      :foe_spawn_dirs => world.players.select{|p| p != agent.player}.
+        reduce({}) {|memo, player| memo[player.team] = direction_of(agent, player.spawn_point); memo},
 
       #deprecated: don't use spawn point
       :spawn_point => agent.spawn_point
@@ -24,10 +27,13 @@ class Sensors
     start_row, start_col = agent.row, agent.column
     end_row, end_col = target.row, target.column
 
+    #use pythagorans to get the distance
     row_diff = end_row - start_row
     col_diff = end_col - start_col
     dist = Math.sqrt(row_diff ** 2.0 + col_diff ** 2.0)
+    return [0,0] if dist == 0
 
+    #normalize to get a unit vector (directional vector of length 1)
     [row_diff / dist, col_diff / dist]
   end
 

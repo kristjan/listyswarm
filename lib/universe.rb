@@ -108,9 +108,10 @@ class Universe
   def print_screen
     setpos(0, 0)
     addstr(world.to_s)
-    header = build_header
-    display_height = (@world.rows - header.size) / 2
-    header.each_with_index do |line, i|
+    info_lines = build_header
+    info_lines += self.class.debug_lines || []
+    display_height = (@world.rows - info_lines.size) / 2
+    (info_lines).each_with_index do |line, i|
       setpos(display_height + i, @world.columns + 10)
       addstr(line)
     end
