@@ -1,7 +1,8 @@
 Swarm::Application.routes.draw do
   root 'game#index'
 
-  get 'tick/:id' => 'game#tick'
+  get 'game/:game_id/tick/:id' => 'game#tick'
+  get 'game/:id' => 'game#game'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

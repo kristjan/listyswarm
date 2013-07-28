@@ -1,19 +1,21 @@
 class window.Swarm
   constructor: ->
-    this.$canvas       = $('#game')
-    this.canvas        = this.$canvas.get(0)
-    this.canvas.width  = window.innerWidth
-    this.canvas.height = window.innerHeight
+    this.$canvas        = $('#game')
+    this.canvas         = this.$canvas.get(0)
+    this.canvas.width   = window.innerWidth
+    this.canvas.height  = window.innerHeight
 
-    this.game          = {}
-    this.data          = {}
-    this.data.tick     = 0
-    this.ctx           = this.canvas.getContext('2d')
+    this.game           = {}
+    this.data           = {}
+    this.data.tick      = 0
+    this.data.game_id   = $('#game-data').data('game-id')
+    this.data.max_ticks = $('#game-data').data('max-ticks')
+    this.ctx            = this.canvas.getContext('2d')
 
-    this.cellWidth     = 8
-    this.cellHeight    = 8
-    this.cellSpacing   = 2
-    this.tickInterval  = 0
+    this.cellWidth      = 8
+    this.cellHeight     = 8
+    this.cellSpacing    = 2
+    this.tickInterval   = 0
 
   run: ->
     this.nextTick()
@@ -62,11 +64,11 @@ class window.Swarm
       this.ctx.strokeRect(x+1, y+1, cw-2, ch-2)
 
   updateStats: ->
-    $('#controls .tick').text(this.data.tick)
+    $('#controls .tick').text(this.data.tick + 1)
 
   updateGameData: ->
     this.data.tick += 1
 
   nextTick: ->
-    if this.data.tick < 500
-      $.get("tick/#{ this.data.tick }", this.drawBoard)
+    if this.data.tick < this.data.max_ticks
+      $.get("/game/#{ this.data.game_id }/tick/#{ this.data.tick }", this.drawBoard)
