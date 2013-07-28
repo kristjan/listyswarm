@@ -103,7 +103,7 @@ class window.Swarm
       #$player.find('.agent').text(player.agent)
       $player.find('.score .value').text(player.score)
       $player.find('.swarm .value').text(player.swarm)
-      $player.find('.team').text(player.agent)
+      $player.find('.agent').text(player.agent)
 
   nextTick: ->
     if this.data.tick < this.data.max_ticks

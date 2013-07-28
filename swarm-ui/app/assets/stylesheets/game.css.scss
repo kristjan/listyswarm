@@ -61,8 +61,7 @@ body {
   }
 
   .players {
-    font-size: 12px;
-    
+
     .player {
       display: none;
       margin: 10px 0;
@@ -76,32 +75,36 @@ body {
       }
 
       .info {
+        width: 150px;
+        float: left;
 
-        .swarm, .score, .agent, .team {
-          float: left;
-          width: 147px;
-          text-align: center;
-        }
-
-        .swarm, .score {
+        .agent {
           margin-top: 5px;
-          width: 78px;
-          .value { font-size: 24px; }
-        }
-
-        .team {
           color: #fff;
           padding: 5px;
           text-align: center;
           font-size: 13px;
         }
 
+        .sub-info {
+          width: 95px;
+          margin: 0 auto;
+          margin-top: 5px;
+
+          .swarm, .score {
+            width: 40px;
+            div { text-align: center; }
+
+            .label { font-size: 11px; color: #aaa; }
+            .value { font-size: 17px; }
+          }
+        }
       }
 
-      &.player-x .team { background-color: #c80000; }
-      &.player-o .team { background-color: #0000c8; }
-      &.player-s .team { background-color: #ff80aa; }
-      &.player-w .team { background-color: #00c800; }
+      &.player-x .agent { background-color: #c80000; }
+      &.player-o .agent { background-color: #0000c8; }
+      &.player-s .agent { background-color: #ff80aa; }
+      &.player-w .agent { background-color: #00c800; }
     }
   }
 }
