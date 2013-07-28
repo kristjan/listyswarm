@@ -1,7 +1,8 @@
-#controls.clear
-  .tick.right= @tick
-  - if @continue_url
-    .continue{ data: { url: @continue_url } }
+#stats.clear
+  .tick.right= 0
+  .players
+    - ['x', 'o', 's', 'w'].reverse_each do |player|
+      = render 'game/shared/player', :player => player
   = link_to "restart", @restart_url, class: 'button left'
 
 %canvas#game

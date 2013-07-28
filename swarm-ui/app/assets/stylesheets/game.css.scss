@@ -10,7 +10,7 @@ body {
 
 #game { padding: 10px; }
 
-#controls {
+#stats {
   border-bottom: 1px solid #444;
   background-color: #333;
   padding: 8px;
@@ -20,6 +20,28 @@ body {
   .tick {
     font-size: 32px;
     font-weight: bold;
+  }
+
+  .players {
+    font-size: 12px;
+    float: right;
+    width: 600px;
+    
+    .player {  
+      float: right;
+      width: 125px;
+      margin-right: 10px;
+
+      .team {
+        text-transform: uppercase;
+        color: #fff;
+        padding: 5px;
+      }
+      &.player-x .team { background-color: #c80000; }
+      &.player-o .team { background-color: #0000c8; }
+      &.player-s .team { background-color: #ff80aa; }
+      &.player-w .team { background-color: #00c800; }
+    }
   }
 }
 
