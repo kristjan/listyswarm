@@ -10,6 +10,12 @@ class AgentBehavior
     @team = team
   end
 
+  # example:
+  # local: 'myavatar.png'
+  # remote: 'http://www.example.com/myavatar.png'
+  def self.avatar
+  end
+
   def can_move?(direction)
     !near?(Wall, direction)
   end

@@ -1,9 +1,13 @@
-.player{ class: "player-#{player}" }
-  .team
-  .agent
-  .swarm
-    .label Swarms
-    .value
-  .score
-    .label Score
-    .value
+.player.clear{ class: "player-#{player[:char]}" }
+  .avatar
+    .color
+    = image_tag player[:avatar]
+  .info
+    .agent= player[:agent]
+    .sub-info.clear
+      .swarm.clear
+        .value 0
+        .label Robots
+      .score.clear
+        .value 0
+        .label Boxes

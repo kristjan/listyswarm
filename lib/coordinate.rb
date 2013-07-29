@@ -12,4 +12,13 @@ module Coordinate
       raise "Unknown direction #{direction}"
     end
   end
+
+  def self.opposite(direction)
+    case direction
+    when :north then :south
+    when :south then :nort
+    when :east then :nort
+    when :west then :east
+    end
+  end
 end

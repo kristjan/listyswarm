@@ -1,56 +1,164 @@
 // Place all the styles related to the Game controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@font-face {
+  font-family: "ArmyStamp";
+  src: url(/assets/ArmyStamp.ttf);
+}
+
+$normal-fonts: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", sans-serif;
+
+$army-fonts: "ArmyStamp", serif;
+
+$gray: '#999';
+
+html { height: 100% }
 
 body {
   margin: 0;
+  height: 100%;
   background-color: #000;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", sans-serif;
+  font-family: $normal-fonts;
 }
 
-#game { padding: 10px; }
+#game { 
+  position: relative;
+  float: left;
+  margin: 10px 10px;
+
+  #board {
+    position:absolute;
+    z-index: 0;
+  }
+
+  #overlay {
+    position: absolute;
+    z-index: 1;
+  }
+}
 
 #stats {
-  border-bottom: 1px solid #444;
-  background-color: #333;
-  padding: 8px;
-  margin: 0 auto;
+  float: right;
+  width: 300px;
+  height: 100%;
+  border-left: 1px solid #333;
+  background-color: #000;
   color: #fff;
+  text-shadow: 1px 1px 1px #000;
 
-  .tick {
-    font-size: 32px;
+  .game {
+    padding: 10px;
+    height: 55px;
+    text-align: center;
+    margin: 20px 0 10px 0;
+    font-family: $normal-fonts;
+    font-size: 24px;
     font-weight: bold;
+
+    .progress-bar-container {
+      margin: 0 auto;
+      margin-top: 10px;
+      width: 80%;
+      border: 1px solid #444;
+      background-color: #222;
+      border-radius: 5px;
+      padding: 1px;
+
+      .progress {
+        width: 0%;
+        height: 10px;
+        border-radius: 3px;
+        background-image: -moz-linear-gradient(bottom, rgb(4,40,112) 7%, rgb(76,165,237) 89%);
+        background-image: -webkit-linear-gradient(bottom, rgb(4,40,112) 7%, rgb(76,165,237) 89%);
+      }
+    }
+  }
+
+  .controls {
+    text-align: center;
+    margin: 10px auto;
+    width: 230px;
+
+    .button {
+      width: 50px;
+      float: left;
+      margin-right: 7px;
+
+      &.last { margin-right: 0; }
+
+      &.play { display: none; }
+    }
   }
 
   .players {
-    font-size: 12px;
-    float: left;
-    width: 800px;
-    
+
     .player {
-      display: none;
-      float: left;
-      width: 175px;
-      margin-right: 10px;
+      margin: 20px 28px;
 
-      .swarm, .score {
+      .avatar {
         float: left;
-        width: 85px;
-        text-align: center;
+        width: 75px;
+        height: 85px;
+        border: 1px solid #fff;
+        margin-left: 10px;
+        border-radius: 3px;
+
+        .color {
+          border-top-left-radius: 3px;
+          border-top-right-radius: 3px;
+          height: 10px;
+          background-color: #f00;
+          border-bottom: 1px solid #fff;
+        }
+
+        img {
+          height: 75px;
+          width: 75px;
+        }
       }
 
-      .team {
-        color: #fff;
-        padding: 5px;
-        font-weight: bold;
-        text-align: center;
-        font-size: 18px;
-      }
+      &.player-x .color { background-color: #c80000; }
+      &.player-o .color { background-color: #0000c8; }
+      &.player-s .color { background-color: #ff80aa; }
+      &.player-w .color { background-color: #00cB00; }
 
-      &.player-x .team { background-color: #c80000; }
-      &.player-o .team { background-color: #0000c8; }
-      &.player-s .team { background-color: #ff80aa; }
-      &.player-w .team { background-color: #00c800; }
+
+      .info {
+        width: 150px;
+        float: left;
+
+        .agent {
+          color: #fff;
+          padding: 8px 10px;
+          font-size: 14px;
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+          border-bottom: 1px solid #333;
+          background-color: #000;
+        }
+
+        .sub-info {
+          width: 95px;
+          padding: 5px 0 0 10px;
+
+          .swarm, .score {
+
+            .label, .value {
+              float: left;
+            }
+
+            .label { 
+              font-size: 11px; 
+              color: #aaa; 
+              font-size: 11px;
+              padding: 4px 0 0 6px;
+            }
+            .value { 
+              font-size: 18px;
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -70,12 +178,13 @@ body {
 }
 
 .button {
-  padding: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid #666;
   border-radius: 3px;
-  font-size: 15px;
-  padding: 9px;
+  font-size: 13px;
+  padding: 5px 0 8px 0;
   background-color: #444;
+  margin-right: 5px;
+  cursor: pointer;
 }
 
 a { color: #fff; text-decoration: none; }

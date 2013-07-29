@@ -1,9 +1,20 @@
 #stats.clear
-  .tick.right= 0
+  .game.clear
+    .game-id= "Game ##{@game_id}"
+    .progress-bar-container
+      .progress
+  .controls.clear
+    .button.play play
+    .button.pause pause
+    .button.next next
+    .button.prev prev
+    .button.replay.last replay
   .players
-    - ['x', 'o', 's', 'w'].each do |player|
-      = render 'game/shared/player', :player => player
+    - @players.values.each do |player|
+      = render 'game/shared/player', player: player
 
-%canvas#game
+#game
+  %canvas#overlay
+  %canvas#board
 
 #game-data{ data: { tick: 0, game_id: @game_id, max_ticks: @max_ticks } }

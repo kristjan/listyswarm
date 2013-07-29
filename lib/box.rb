@@ -12,8 +12,6 @@ class Box < Sprite
   def display_char
     if owner.nil?
       'b'
-    elsif owner.team == 'x'
-      '.'
     else
       ','
     end
