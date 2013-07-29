@@ -17,12 +17,14 @@ class AgentBehavior::GuardingAgent < AgentBehavior
 
     # Patrol
     on = sensors.vision(0, 0)
-    if on.detect{|sprite| sprite.is_a?(Box) && sprite.owned_by?(self)}
-      return :east
-    elsif !near?(Wall, :north)
-      return :north
+    preferred_away = away_from_spawn_point.last
+    preferred_toward = towards_spawn_point.first
+    if !near?(Wall, preferred_toward)
+      return preferred_toward
+    elsif on.detect{|sprite| sprite.is_a?(Box) && sprite.owned_by?(self)}
+      return preferred_away
     else
-      return :west
+      return Coordinate.opposite(preferred_away)
     end
   end
 
@@ -141,7 +143,7 @@ class AgentBehavior::GuardingAgent < AgentBehavior
     dirs = [:north, :south, :east, :west] - towards_spawn_point
     # Amplify our directional bias
     case @bias
-    when :none       then dirs
+    when :none, nil  then dirs
     when :vertical   then dirs.concat((dirs - [:east, :west]) * @bias_weight)
     when :horizontal then dirs.concat((dirs - [:north, :south]) * @bias_weight)
     end
