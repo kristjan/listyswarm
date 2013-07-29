@@ -4,7 +4,7 @@
   "columns": 20,
   "world": "SynchronizedWorld",
   "vision_radius": 2,
-  "swarm_size": 10,
+  "swarm_size": 1,
   "agent_behaviors": [
     "TornadoAgent",
     "GathererAgent"
@@ -17,7 +17,7 @@
   },
 
   "logger": "NullLogger",
-  "newline_wait": false,
+  "newline_wait": true,
   "sleep_seconds": 0.001,
   "random_seed": 1,
   "box_droppers": [
