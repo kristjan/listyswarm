@@ -18,6 +18,14 @@ class window.Swarm
 
     this.explosionImage = new Image
     this.explosionImage.src = '/assets/explosion.png'
+    this.blueListyImage = new Image
+    this.blueListyImage.src = '/assets/blue-listy-icon.png'
+    this.redListyImage = new Image
+    this.redListyImage.src = '/assets/red-listy-icon.png'
+    this.pinkListyImage = new Image
+    this.pinkListyImage.src = '/assets/pink-listy-icon.png'
+    this.greenListyImage = new Image
+    this.greenListyImage.src = '/assets/green-listy-icon.png'
 
     this.game           = {}
     this.data           = {}
@@ -25,8 +33,8 @@ class window.Swarm
     this.data.game_id   = $('#game-data').data('game-id')
     this.data.max_ticks = $('#game-data').data('max-ticks')
 
-    this.cellWidth      = 8
-    this.cellHeight     = 8
+    this.cellWidth      = 17
+    this.cellHeight     = 17
     this.cellSpacing    = 2
     this.tickInterval   = 0
 
@@ -118,17 +126,21 @@ class window.Swarm
 
     switch object
       when 'x', 'X' #red
-        board.fillStyle = "rgb(200, 0, 0)"
-        board.fillRect(x, y, cw, ch)
+        #board.fillStyle = "rgb(200, 0, 0)"
+        #board.fillRect(x, y, cw, ch)
+        board.drawImage(this.redListyImage, x, y)
       when 'o', 'O' #blue
-        board.fillStyle = "rgb(0, 0, 200)"
-        board.fillRect(x, y, cw, ch)
+        #board.fillStyle = "rgb(0, 0, 200)"
+        #board.fillRect(x, y, cw, ch)
+        board.drawImage(this.blueListyImage, x, y)
       when 's', 'S' #pink
-        board.fillStyle = "rgb(255, 128, 170)"
-        board.fillRect(x, y, cw, ch)
+        #board.fillStyle = "rgb(255, 128, 170)"
+        #board.fillRect(x, y, cw, ch)
+        board.drawImage(this.pinkListyImage, x, y)
       when 'w', 'W' #green
-        board.fillStyle = "rgb(0, 200, 0)"
-        board.fillRect(x, y, cw, ch)
+        #board.fillStyle = "rgb(0, 200, 0)"
+        #board.fillRect(x, y, cw, ch)
+        board.drawImage(this.greenListyImage, x, y)
       when '1', '2', '3', '4' #yellow
         board.fillStyle = "rgb(255, 255, 0)"
         board.fillRect(x, y, cw, ch)

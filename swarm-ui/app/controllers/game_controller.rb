@@ -37,7 +37,7 @@ class GameController < ApplicationController
             if data[char] && data[char]['avatar'].present?
               custom_avatar_url(data[char]['avatar'])
             else
-              default_avatar_url
+              default_avatar_url(char)
             end
 
           players[char] = 
@@ -59,7 +59,14 @@ class GameController < ApplicationController
     end
   end
 
-  def default_avatar_url
-    "/assets/tiny-listy.jpg"
+  def default_avatar_url(char)
+    case char
+    when 'x' then "/assets/red-listy-avatar.png"
+    when 'o' then "/assets/blue-listy-avatar.png"
+    when 's' then "/assets/pink-listy-avatar.png"
+    when 'w' then "/assets/green-listy-avatar.png"
+    else
+      "/assets/tiny-listy.jpg"
+    end
   end
 end
