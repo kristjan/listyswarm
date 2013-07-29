@@ -55,6 +55,20 @@ class Sensors
     end
   end
 
+  def enemies
+    [].tap do |visible_enemies|
+      vision_array.each_with_index do |row, row_num|
+        row.each_with_index do |sprites, column_num|
+          if sprites.detect do |sprite|
+            sprite.is_a?(Agent) && foe_teams.include?(sprite.team)
+          end
+            visible_enemies << [row_num - row_radius, column_num - column_radius]
+          end
+        end
+      end
+    end
+  end
+
   # the offsets should be <= the vision radius.
   # returns the sprites at the position offset to the agent
   # a [0,0] offset would return the sprites on the agents square
