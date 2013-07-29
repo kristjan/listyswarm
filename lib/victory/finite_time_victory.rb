@@ -1,5 +1,4 @@
 require 'set'
-
 require 'coordinate'
 
 class Victory::FiniteTimeVictory < Victory
@@ -37,6 +36,42 @@ class Victory::FiniteTimeVictory < Victory
 
     visited.delete coord
     longest
+  end
+
+
+  # This is an inlined version of longest_chain (stack-backed rather
+  # than recursion which incurs the cost of constructing method contexts),
+  # but it turns out that it's slower (maybe the duping of the visited sets?)
+  def longest_chain2(coord)
+    max_chain = 0
+    stack = [[1, coord, Set.new]]
+
+    while stack.length > 0
+      longest, coord, visited = stack.pop
+
+      visited << coord
+
+      max_chain = longest if max_chain < longest
+
+      to_traverse = []
+      Coordinate::DIRECTIONS.each do |dir|
+        next_coord = Coordinate.neighbor(coord, dir)
+        row, col = next_coord
+        if (row < 0 || col < 0 || row >= world.rows || col >= world.columns)
+          nil
+        elsif visited.include?(next_coord)
+          nil
+        elsif world[row, col].detect{|item| item.is_a?(Box)}.nil?
+          nil
+        else
+          to_traverse << [longest + 1, next_coord, visited.dup]
+        end
+      end
+
+      stack += to_traverse
+    end
+
+    max_chain
   end
 
 end

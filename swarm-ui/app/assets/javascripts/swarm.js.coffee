@@ -114,7 +114,7 @@ class window.Swarm
           swarm: summary[object].swarm
           score: summary[object].score
           agent: this.agentName(summary[object].agent)
-        
+
         this.data.players.push(player)
 
   agentName: (name)->
@@ -150,8 +150,7 @@ class window.Swarm
       else
         board.clearRect(x, y, cw, ch)
 
-
-    if _(['X', 'O', 'S', 'W', 'b']).contains(object)
+    if _(['X', 'O', 'S', 'W', 'b', '.', ',']).contains(object)
       board.strokeStyle = "#ccc"
       board.lineWidth = 2
       board.strokeRect(x+1, y+1, cw-2, ch-2)
