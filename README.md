@@ -10,6 +10,8 @@ designed to be simple and fun to tinker with.
 
 ## Running the World
 
+It's easier than you'd expect ;)
+
 To start the simulation, just call ```run``` from the command line and
 pass a path to a configuration file.
 
@@ -39,7 +41,7 @@ class Agent::RandomAgent < BehaviorAgent
     [:north, :south, :east, :west].shuffle.first
   end
 end
-```
+```ruby
 
 ###Available Actions
 
@@ -84,7 +86,6 @@ offsets.
 sensors.vision(0,0) 
 # =>  your agent's own location
 
-
 sensors.vision(-1,0)
 # => one above
 
@@ -94,9 +95,9 @@ sensors.vision(1,0)
 sensors.vision(0,-1)
 # => one left
 
-sensors.vision(1,0)
-# => one below 
-```
+sensors.vision(0,1)
+# => one right 
+```ruby
 
 #### Other sensors
 
@@ -108,7 +109,7 @@ sensors.vision(1,0)
 :friendly_spawn_dir #A 2-d unit vector that points to your own spawn
 :foe_spawn_dirs #A list of directions, each pointing to a foe's spawn
 :agent_id  #A unique ID assigned to each agent
-```
+```ruby
 
 
 ## The Grid
