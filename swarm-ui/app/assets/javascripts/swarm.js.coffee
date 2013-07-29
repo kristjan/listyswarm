@@ -57,7 +57,7 @@ class window.Swarm
           swarm: summary[object].swarm
           score: summary[object].score
           agent: this.agentName(summary[object].agent)
-        
+
         this.data.players.push(player)
 
   agentName: (name)->
@@ -80,7 +80,7 @@ class window.Swarm
 
     this.ctx.fillRect(x, y, cw, ch)
 
-    if _(['X', 'O', 'S', 'W', 'b']).contains(object)
+    if _(['X', 'O', 'S', 'W', 'b', '.', ',']).contains(object)
       this.ctx.strokeStyle = "#ccc"
       this.ctx.lineWidth = 2
       this.ctx.strokeRect(x+1, y+1, cw-2, ch-2)
