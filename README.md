@@ -35,13 +35,13 @@ Further, In this method you can't directly see what other agents going to do, yo
 with any global state.  These limitations are what makes this 
 
 
-```
+```ruby
 class Agent::RandomAgent < BehaviorAgent
   def action
     [:north, :south, :east, :west].shuffle.first
   end
 end
-```ruby
+```
 
 ###Available Actions
 
@@ -81,8 +81,7 @@ Technically, the whole array of what you can see is given via the
 because you have to figure out your location in that array and calculate
 offsets.  
 
-```
-
+```ruby
 sensors.vision(0,0) 
 # =>  your agent's own location
 
@@ -97,11 +96,11 @@ sensors.vision(0,-1)
 
 sensors.vision(0,1)
 # => one right 
-```ruby
+```
 
 #### Other sensors
 
-```
+```ruby
 :vision_array #A raw array of your vision
 :vision_radius #The size of your vision radius
 :has_box #Is true if the agent is holding a box
@@ -109,7 +108,7 @@ sensors.vision(0,1)
 :friendly_spawn_dir #A 2-d unit vector that points to your own spawn
 :foe_spawn_dirs #A list of directions, each pointing to a foe's spawn
 :agent_id  #A unique ID assigned to each agent
-```ruby
+```
 
 
 ## The Grid
