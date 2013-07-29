@@ -22,8 +22,19 @@ body {
 }
 
 #game { 
+  position: relative;
   float: left;
   margin: 10px 10px;
+
+  #board {
+    position:absolute;
+    z-index: 0;
+  }
+
+  #overlay {
+    position: absolute;
+    z-index: 1;
+  }
 }
 
 #stats {

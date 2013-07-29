@@ -3,17 +3,27 @@ class window.Swarm
     this.$game          = $('#game')
     this.$stats         = $('#stats')
     this.$progress      = $('.progress')
-    this.$canvas        = $('#board')
-    this.canvas         = this.$canvas.get(0)
-    this.canvas.width   = this.boardWidth()
-    this.canvas.height  = window.innerHeight
+    
+    this.$board         = $('#board')
+    this.board          = this.$board.get(0)
+    this.board.width    = this.boardWidth()
+    this.board.height   = window.innerHeight
+    this.board_canvas   = this.board.getContext('2d')
+
+    this.$overlay       = $('#overlay')
+    this.overlay        = this.$overlay.get(0)
+    this.overlay.width  = this.boardWidth()
+    this.overlay.height = window.innerHeight
+    this.overlay_canvas = this.overlay.getContext('2d')
+
+    this.explosionImage = new Image
+    this.explosionImage.src = '/assets/explosion.png'
 
     this.game           = {}
     this.data           = {}
     this.data.tick      = 0
     this.data.game_id   = $('#game-data').data('game-id')
     this.data.max_ticks = $('#game-data').data('max-ticks')
-    this.ctx            = this.canvas.getContext('2d')
 
     this.cellWidth      = 8
     this.cellHeight     = 8
@@ -61,12 +71,13 @@ class window.Swarm
     this.parseGameFile(response)
     this.updateStats()
 
-    this.ctx.restore
-    this.ctx.save
-
+    board = this.board_canvas
     cw = this.cellWidth
     ch = this.cellHeight
     sp = this.cellSpacing
+
+    board.restore
+    board.save
 
     _(this.data.board).each (row, rindex)=>
       _(row.split('')).each (col, cindex)=>
@@ -102,30 +113,36 @@ class window.Swarm
     name.split('::')[1]
 
   drawCell: (object, x, y, cw, ch)->
+    board   = this.board_canvas
+    overlay = this.overlay_canvas
+
     switch object
       when 'x', 'X' #red
-        this.ctx.fillStyle = "rgb(200, 0, 0)"
-        this.ctx.fillRect(x, y, cw, ch)
+        board.fillStyle = "rgb(200, 0, 0)"
+        board.fillRect(x, y, cw, ch)
       when 'o', 'O' #blue
-        this.ctx.fillStyle = "rgb(0, 0, 200)"
-        this.ctx.fillRect(x, y, cw, ch)
+        board.fillStyle = "rgb(0, 0, 200)"
+        board.fillRect(x, y, cw, ch)
       when 's', 'S' #pink
-        this.ctx.fillStyle = "rgb(255, 128, 170)"
-        this.ctx.fillRect(x, y, cw, ch)
+        board.fillStyle = "rgb(255, 128, 170)"
+        board.fillRect(x, y, cw, ch)
       when 'w', 'W' #green
-        this.ctx.fillStyle = "rgb(0, 200, 0)"
-        this.ctx.fillRect(x, y, cw, ch)
+        board.fillStyle = "rgb(0, 200, 0)"
+        board.fillRect(x, y, cw, ch)
       when '1', '2', '3', '4' #yellow
-        this.ctx.fillStyle = "rgb(255, 255, 0)"
-        this.ctx.fillRect(x, y, cw, ch)
+        board.fillStyle = "rgb(255, 255, 0)"
+        board.fillRect(x, y, cw, ch)
+      when '*'
+        overlay.drawImage(this.explosionImage, x-10, y-10)
+        setTimeout (=>overlay.clearRect(x-10, y-10, 30, 30)), 500
       else
-        this.ctx.clearRect(x, y, cw, ch)
+        board.clearRect(x, y, cw, ch)
 
 
     if _(['X', 'O', 'S', 'W', 'b']).contains(object)
-      this.ctx.strokeStyle = "#ccc"
-      this.ctx.lineWidth = 2
-      this.ctx.strokeRect(x+1, y+1, cw-2, ch-2)
+      board.strokeStyle = "#ccc"
+      board.lineWidth = 2
+      board.strokeRect(x+1, y+1, cw-2, ch-2)
 
   updateStats: ->
     progress = (this.data.tick / this.data.max_ticks)
