@@ -74,18 +74,22 @@ class window.Swarm
     switch object
       when 'x', 'X' #red
         this.ctx.fillStyle = "rgb(200, 0, 0)"
+        this.ctx.fillRect(x, y, cw, ch)
       when 'o', 'O' #blue
         this.ctx.fillStyle = "rgb(0, 0, 200)"
+        this.ctx.fillRect(x, y, cw, ch)
       when 's', 'S' #pink
         this.ctx.fillStyle = "rgb(255, 128, 170)"
+        this.ctx.fillRect(x, y, cw, ch)
       when 'w', 'W' #green
         this.ctx.fillStyle = "rgb(0, 200, 0)"
+        this.ctx.fillRect(x, y, cw, ch)
       when '1', '2', '3', '4' #yellow
         this.ctx.fillStyle = "rgb(255, 255, 0)"
+        this.ctx.fillRect(x, y, cw, ch)
       else
-        this.ctx.fillStyle = "rgb(0, 0, 0)"
+        this.ctx.clearRect(x, y, cw, ch)
 
-    this.ctx.fillRect(x, y, cw, ch)
 
     if _(['X', 'O', 'S', 'W', 'b']).contains(object)
       this.ctx.strokeStyle = "#ccc"

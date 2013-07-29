@@ -1,12 +1,23 @@
 // Place all the styles related to the Game controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@font-face {
+  font-family: "ArmyStamp";
+  src: url(/assets/ArmyStamp.ttf);
+}
+
+$normal-fonts: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", sans-serif;
+
+$army-fonts: "ArmyStamp", serif;
+
+
 html { height: 100% }
+
 body {
   margin: 0;
   height: 100%;
   background-color: #000;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", sans-serif;
+  font-family: $normal-fonts;
 }
 
 #game { 
@@ -14,10 +25,11 @@ body {
 }
 
 #stats {
+  background: url('/assets/bg-tweed.png');
   float: right;
   width: 250px;
   height: 100%;
-  border-left: 1px solid #444;
+  border-left: 1px solid #999;
   background-color: #333;
   margin: 0 auto;
   color: #fff;
@@ -27,11 +39,9 @@ body {
     padding: 10px;
     height: 55px;
     text-align: center;
-    font-size: 24px;
     margin-bottom: 10px;
-
-    .game-id {
-    }
+    font-family: $army-fonts;
+    font-size: 36px;
 
     .progress-bar-container {
       margin: 0 auto;
@@ -82,21 +92,28 @@ body {
           margin-top: 5px;
           color: #fff;
           padding: 5px;
-          text-align: center;
+          padding-left: 10px;
           font-size: 13px;
         }
 
         .sub-info {
           width: 95px;
           margin: 0 auto;
-          margin-top: 5px;
 
           .swarm, .score {
             width: 40px;
             div { text-align: center; }
 
-            .label { font-size: 11px; color: #aaa; }
-            .value { font-size: 17px; }
+            .label { 
+              font-size: 11px; 
+              color: #aaa; 
+              font-family: $army-fonts;
+              font-size: 18px;
+            }
+            .value { 
+              font-family: $army-fonts;
+              font-size: 36px;
+            }
           }
         }
       }
