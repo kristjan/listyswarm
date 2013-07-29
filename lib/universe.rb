@@ -62,9 +62,10 @@ class Universe
       stats[:tick] = @ticks
       @players.each do |player|
         stats[player.team] = {
-          agent: player.agent_behavior.name,
-          swarm: player.swarm.size,
-          score: player.score
+          agent:  player.agent_behavior.name,
+          avatar: player.agent_behavior.avatar,
+          swarm:  player.swarm.size,
+          score:  player.score
         }
       end
     end

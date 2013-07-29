@@ -10,7 +10,7 @@
     controls
   .players
     - ['x', 'o', 's', 'w'].each do |player|
-      = render 'game/shared/player', :player => player
+      = render 'game/shared/player', :player => player, :avatar => @avatars[player]
 
 
 #game-data{ data: { tick: 0, game_id: @game_id, max_ticks: @max_ticks } }

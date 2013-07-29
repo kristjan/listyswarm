@@ -76,12 +76,18 @@ body {
       display: none;
       margin: 10px 0;
 
-      .photo {
+      .avatar {
         float: left;
         width: 75px;
         height: 75px;
         border: 1px solid #fff;
         margin-left: 10px;
+        border-radius: 3px;
+
+        img {
+          height: 75px;
+          width: 75px;
+        }
       }
 
       .info {
