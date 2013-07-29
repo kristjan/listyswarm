@@ -1,12 +1,13 @@
 .player.clear{ class: "player-#{player}" }
   .avatar
+    .color
     = image_tag avatar
   .info
-    .agent
+    .agent= agent
     .sub-info.clear
-      .swarm.left
-        .value
-        .label Bots
-      .score.right
-        .value
-        .label Score
+      .swarm.clear
+        .value 0
+        .label Robots
+      .score.clear
+        .value 0
+        .label Boxes

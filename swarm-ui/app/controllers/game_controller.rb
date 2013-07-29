@@ -13,6 +13,7 @@ class GameController < ApplicationController
     @game_id = params[:id]
     @max_ticks = Dir.entries(game_dir(@game_id)).count-2
     set_avatars
+    set_agent_names
   end
 
   def set_avatars
@@ -30,6 +31,19 @@ class GameController < ApplicationController
     end
   end
 
+  def set_agent_names
+    file = File.open(tick_file(1, @game_id))
+    data = JSON.parse(file.first)
+
+    @agent_names = {}.tap do |names|
+      ['x', 'o', 'w', 's'].each do |char|
+        if data[char]
+          names[char] = agent_name(data[char]['agent'])
+        end
+      end
+    end
+  end
+
   def game_dir(game_id)
     game_dir  = (game_id.to_i).to_s.rjust(10, '0')
     "../games/#{game_dir}"
@@ -38,6 +52,10 @@ class GameController < ApplicationController
   def tick_file(tick_id, game_id)
     file_name = (tick_id.to_i+1).to_s.rjust(10, '0')
     "#{game_dir(game_id)}/#{file_name}"
+  end
+
+  def agent_name(klass)
+    klass.split('::').last
   end
 
   def custom_avatar_url(url)

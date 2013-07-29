@@ -24,7 +24,7 @@ class window.Swarm
     this.nextTick()
 
   boardWidth: ->
-    window.innerWidth - this.$stats.innerWidth() - 25
+    window.innerWidth - this.$stats.innerWidth() - 45
 
 
   drawBoard: (response)=>
@@ -104,10 +104,9 @@ class window.Swarm
     _(this.data.players).each (player)->
       $player = $(".players .player-#{ player.char }")
       $player.show()
-      #$player.find('.agent').text(player.agent)
       $player.find('.score .value').text(player.score)
       $player.find('.swarm .value').text(player.swarm)
-      $player.find('.agent').text(player.agent)
+      #$player.find('.agent').text(player.agent)
 
   nextTick: ->
     if this.data.tick < this.data.max_ticks

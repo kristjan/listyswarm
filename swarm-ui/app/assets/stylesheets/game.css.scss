@@ -10,6 +10,7 @@ $normal-fonts: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", 
 
 $army-fonts: "ArmyStamp", serif;
 
+$gray: '#999';
 
 html { height: 100% }
 
@@ -22,16 +23,15 @@ body {
 
 #game { 
   float: left;
+  margin: 10px 10px;
 }
 
 #stats {
-  background: url('/assets/bg-tweed.png');
   float: right;
-  width: 250px;
+  width: 300px;
   height: 100%;
-  border-left: 1px solid #999;
-  background-color: #333;
-  margin: 0 auto;
+  border-left: 1px solid #333;
+  background-color: #000;
   color: #fff;
   text-shadow: 1px 1px 1px #000;
 
@@ -40,18 +40,18 @@ body {
     height: 55px;
     text-align: center;
     margin-bottom: 10px;
-    font-family: $army-fonts;
-    font-size: 36px;
+    font-family: $normal-fonts;
+    font-size: 24px;
+    font-weight: bold;
 
     .progress-bar-container {
       margin: 0 auto;
       margin-top: 10px;
       width: 80%;
-      border: 1px solid #666;
-      background-color: #000;
+      border: 1px solid #444;
+      background-color: #222;
       border-radius: 5px;
       padding: 1px;
-      box-shadow: 0 0 3px #111;
 
       .progress {
         width: 0%;
@@ -65,24 +65,32 @@ body {
 
   .controls {
     padding: 40px;
-    border: 1px dashed #999;
+    border: 1px dashed #333;
     text-align: center;
-    margin: 10px 0;
+    margin: 10px 34px;
   }
 
   .players {
 
     .player {
       display: none;
-      margin: 10px 0;
+      margin: 20px 28px;
 
       .avatar {
         float: left;
         width: 75px;
-        height: 75px;
+        height: 85px;
         border: 1px solid #fff;
         margin-left: 10px;
         border-radius: 3px;
+
+        .color {
+          border-top-left-radius: 3px;
+          border-top-right-radius: 3px;
+          height: 10px;
+          background-color: #f00;
+          border-bottom: 1px solid #fff;
+        }
 
         img {
           height: 75px;
@@ -90,44 +98,48 @@ body {
         }
       }
 
+      &.player-x .color { background-color: #c80000; }
+      &.player-o .color { background-color: #0000c8; }
+      &.player-s .color { background-color: #ff80aa; }
+      &.player-w .color { background-color: #00cB00; }
+
+
       .info {
         width: 150px;
         float: left;
 
         .agent {
-          margin-top: 5px;
           color: #fff;
-          padding: 5px;
-          padding-left: 10px;
-          font-size: 13px;
+          padding: 8px 10px;
+          font-size: 14px;
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+          border-bottom: 1px solid #333;
+          background-color: #000;
         }
 
         .sub-info {
           width: 95px;
-          margin: 0 auto;
+          padding: 5px 0 0 10px;
 
           .swarm, .score {
-            width: 40px;
-            div { text-align: center; }
+
+            .label, .value {
+              float: left;
+            }
 
             .label { 
               font-size: 11px; 
               color: #aaa; 
-              font-family: $army-fonts;
-              font-size: 18px;
+              font-size: 11px;
+              padding: 4px 0 0 6px;
             }
             .value { 
-              font-family: $army-fonts;
-              font-size: 36px;
+              font-size: 18px;
             }
           }
         }
       }
-
-      &.player-x .agent { background-color: #c80000; }
-      &.player-o .agent { background-color: #0000c8; }
-      &.player-s .agent { background-color: #ff80aa; }
-      &.player-w .agent { background-color: #00c800; }
     }
   }
 }
