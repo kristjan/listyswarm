@@ -39,7 +39,7 @@ body {
     padding: 10px;
     height: 55px;
     text-align: center;
-    margin-bottom: 10px;
+    margin: 20px 0 10px 0;
     font-family: $normal-fonts;
     font-size: 24px;
     font-weight: bold;
@@ -64,16 +64,24 @@ body {
   }
 
   .controls {
-    padding: 40px;
-    border: 1px dashed #333;
     text-align: center;
-    margin: 10px 34px;
+    margin: 10px auto;
+    width: 230px;
+
+    .button {
+      width: 50px;
+      float: left;
+      margin-right: 7px;
+
+      &.last { margin-right: 0; }
+
+      &.play { display: none; }
+    }
   }
 
   .players {
 
     .player {
-      display: none;
       margin: 20px 28px;
 
       .avatar {
@@ -159,12 +167,13 @@ body {
 }
 
 .button {
-  padding: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid #666;
   border-radius: 3px;
-  font-size: 15px;
-  padding: 9px;
+  font-size: 13px;
+  padding: 5px 0 8px 0;
   background-color: #444;
+  margin-right: 5px;
+  cursor: pointer;
 }
 
 a { color: #fff; text-decoration: none; }

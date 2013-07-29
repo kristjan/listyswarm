@@ -20,12 +20,42 @@ class window.Swarm
     this.cellSpacing    = 2
     this.tickInterval   = 0
 
+    this.play           = true
+    this.$playButton    = $('.play')
+    this.$pauseButton   = $('.pause')
+    this.$nextButton    = $('.next')
+    this.$prevButton    = $('.prev')
+    this.$replayButton  = $('.replay')
+
+    this.attachEvents()
+
   run: ->
     this.nextTick()
 
+  attachEvents: ->
+    $('body').on 'click', '.pause', =>
+      this.$pauseButton.hide()
+      this.$playButton.show()
+      this.play = false
+
+    $('body').on 'click', '.play', =>
+      this.$playButton.hide()
+      this.$pauseButton.show()
+      this.play = true
+      this.nextTick()
+
+    $('body').on 'click', '.next', =>
+      this.nextTick()
+
+    $('body').on 'click', '.prev', =>
+      this.prevTick()
+
+    $('body').on 'click', '.replay', =>
+      this.data.tick = 0
+      this.nextTick()
+
   boardWidth: ->
     window.innerWidth - this.$stats.innerWidth() - 45
-
 
   drawBoard: (response)=>
     this.parseGameFile(response)
@@ -44,7 +74,8 @@ class window.Swarm
         y = ch * rindex + (sp * rindex)
         this.drawCell(col, x, y, cw, ch)
 
-    setTimeout (=> this.nextTick()), this.tickInterval
+    if this.play
+      setTimeout (=> this.nextTick()), this.tickInterval
 
   parseGameFile: (file)->
     board   = file.split("\n")
@@ -53,7 +84,7 @@ class window.Swarm
     this.data.summary = summary
     this.data.tick    = summary.tick
     this.data.board   = board
-    this.data.players   = []
+    this.data.players = []
 
     colors = ['red', 'blue', 'pink', 'green']
     _(['x','o','s','w']).each (object)=>
@@ -103,11 +134,17 @@ class window.Swarm
 
     _(this.data.players).each (player)->
       $player = $(".players .player-#{ player.char }")
-      $player.show()
       $player.find('.score .value').text(player.score)
       $player.find('.swarm .value').text(player.swarm)
       #$player.find('.agent').text(player.agent)
 
   nextTick: ->
-    if this.data.tick < this.data.max_ticks
+    if this.data.tick < this.data.max_ticks-1
+      this.data.tick += 1
       $.get("/game/#{ this.data.game_id }/tick/#{ this.data.tick }", this.drawBoard)
+
+  prevTick: ->
+    if this.data.tick > 1
+      this.data.tick -= 1
+      $.get("/game/#{ this.data.game_id }/tick/#{ this.data.tick }", this.drawBoard)
+

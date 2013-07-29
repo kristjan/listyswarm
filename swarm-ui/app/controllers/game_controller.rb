@@ -12,36 +12,7 @@ class GameController < ApplicationController
   def game
     @game_id = params[:id]
     @max_ticks = Dir.entries(game_dir(@game_id)).count-2
-    set_avatars
-    set_agent_names
-  end
-
-  def set_avatars
-    file = File.open(tick_file(1, @game_id))
-    data = JSON.parse(file.first)
-
-    @avatars = {}.tap do |avatars|
-      ['x','o','w','s'].each do |char|
-        if data[char] && data[char]['avatar'].present?
-          avatars[char] = custom_avatar_url(data[char]['avatar'])
-        else
-          avatars[char] = default_avatar_url
-        end
-      end
-    end
-  end
-
-  def set_agent_names
-    file = File.open(tick_file(1, @game_id))
-    data = JSON.parse(file.first)
-
-    @agent_names = {}.tap do |names|
-      ['x', 'o', 'w', 's'].each do |char|
-        if data[char]
-          names[char] = agent_name(data[char]['agent'])
-        end
-      end
-    end
+    set_players
   end
 
   def game_dir(game_id)
@@ -50,8 +21,30 @@ class GameController < ApplicationController
   end
 
   def tick_file(tick_id, game_id)
-    file_name = (tick_id.to_i+1).to_s.rjust(10, '0')
+    file_name = (tick_id.to_i).to_s.rjust(10, '0')
     "#{game_dir(game_id)}/#{file_name}"
+  end
+
+  def set_players
+    file = File.open(tick_file(1, @game_id))
+    data = JSON.parse(file.first)
+
+    @players = {}.tap do |players|
+      %w(x o w s).each do |char|
+        if data[char].present?
+          agent = agent_name(data[char]['agent'])
+          avatar =
+            if data[char] && data[char]['avatar'].present?
+              custom_avatar_url(data[char]['avatar'])
+            else
+              default_avatar_url
+            end
+
+          players[char] = 
+            { char: char, agent: agent, avatar: avatar }
+        end
+      end
+    end
   end
 
   def agent_name(klass)

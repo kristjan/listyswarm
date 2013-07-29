@@ -4,10 +4,14 @@
     .progress-bar-container
       .progress
   .controls.clear
-    controls
+    .button.play play
+    .button.pause pause
+    .button.next next
+    .button.prev prev
+    .button.replay.last replay
   .players
-    - ['x', 'o', 's', 'w'].each do |player|
-      = render 'game/shared/player', player: player, avatar: @avatars[player], agent: @agent_names[player]
+    - @players.values.each do |player|
+      = render 'game/shared/player', player: player
 
 #game
   %canvas#board

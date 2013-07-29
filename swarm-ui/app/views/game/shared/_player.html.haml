@@ -1,9 +1,9 @@
-.player.clear{ class: "player-#{player}" }
+.player.clear{ class: "player-#{player[:char]}" }
   .avatar
     .color
-    = image_tag avatar
+    = image_tag player[:avatar]
   .info
-    .agent= agent
+    .agent= player[:agent]
     .sub-info.clear
       .swarm.clear
         .value 0
