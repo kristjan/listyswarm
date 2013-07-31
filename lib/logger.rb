@@ -21,8 +21,12 @@ class Logger
 
   def self.log_path(game_id=nil, frame_id=nil)
     parts = ['.', LOG_DIR]
-    parts << game_id.to_s.rjust(10, '0') if game_id
-    parts << frame_id.to_s.rjust(10, '0') if frame_id
+    if game_id == '*'
+      parts << '*'
+    else
+      parts << game_id.to_s.rjust(10, '0') if game_id
+      parts << frame_id.to_s.rjust(10, '0') if frame_id
+    end
     File.join(parts)
   end
 
