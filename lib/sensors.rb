@@ -1,7 +1,7 @@
 class Sensors
   attr_accessor :vision_array, :vision_radius, :has_box,
     :foe_teams, :friendly_spawn_dir, :foe_spawn_dirs, :spawn_point,
-    :agent_id
+    :agent_id, :swarm_size, :debug_world, :debug_agent
 
   # Generates the hash that is given to the behavior function
   def self.create(world, agent)
@@ -9,7 +9,7 @@ class Sensors
 
     # any data that, for the purposes of fairness, needs to be cleaned or
     # precomputed should be passed in the init.  the rest should just
-    Sensors.new({
+    sensors = Sensors.new(world, {
       :vision_radius => world.options[:vision_radius],
       :vision_array => @vision_capture.generate_vision(world, agent),
       :has_box => agent.has_box?,
@@ -18,9 +18,22 @@ class Sensors
       :foe_spawn_dirs => world.players.select{|p| p != agent.player}.
         reduce({}) {|memo, player| memo[player.team] = direction_of(agent, player.spawn_point); memo},
       :agent_id => agent.id,
+      :swarm_size => world.options[:swarm_size],
       #deprecated: don't use spawn point
       :spawn_point => agent.spawn_point
     })
+
+    # if in debug mode, give full access to world and agent
+    if world.options[:debug_mode]
+      sensors.debug_world = world
+      sensors.debug_agent = agent
+    end
+
+    sensors
+  end
+
+  def initialize(world, options)
+    options.each_pair {|key, value| self.send("#{key}=", value) }
   end
 
   # returns an ordered pair of magnitudes, normalized such that their
@@ -37,10 +50,6 @@ class Sensors
 
     #normalize to get a unit vector (directional vector of length 1)
     [row_diff / dist, col_diff / dist]
-  end
-
-  def initialize(options)
-    options.each_pair {|key, value| self.send("#{key}=", value) }
   end
 
   def boxes

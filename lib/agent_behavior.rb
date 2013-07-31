@@ -26,7 +26,22 @@ class AgentBehavior
   end
 
   def on_spawn_point?
-    sensors.vision(0, 0).detect{|sprite| sprite == spawn_point}
+    sensors.vision(0, 0).detect{|sprite| sprite.is_a?(SpawnPoint) && sprite.player.team}
+  end
+
+  def on_box?
+    sensors.vision(0, 0).select(&:box?).any? do |box|
+      !box.owned_by?(self)
+    end
+  end
+
+  def near_box_chain?
+    towards_spawn_point.detect do |direction|
+      coords = Coordinate.neighbor([0, 0], direction)
+      sensors.vision(*coords).select(&:box?).any? do |box|
+        box.owned_by?(self)
+      end
+    end
   end
 
   # The player should implement this in a subclass
@@ -53,20 +68,26 @@ class AgentBehavior
   # both a non-zero row and a non-zero column component, will randomly
   # choose between closing the gap on the row dimension or the column
   # dimension.  The probability is weighted by the magnitive of the
-  # offset in that dimension.  If false, will favor fixing the row offset
-  # component first.
-  def towards_coords_offset(coords_offset, rand = true)
-    row, col = coords # Relative
+  # offset in that dimension.  If false, will favor the dimension of
+  # the largest magnitude.
+  def towards_coords_offset(coords_offset, rand=true)
+    return nil if coords_offset == [0,0]
+    row, col = coords_offset # Relative
 
     if rand
-      total = coords_offset[0] + coords_offset[1]
+      #total = coords_offset[0] + coords_offset[1]
+      dir = nil
+      weighted_randomizer([
+        [coords_offset[0], -> { dir = coords_offset[0] < 0 ? :north : :south }],
+        [coords_offset[1], -> { dir = coords_offset[1] < 0 ? :west : :east }],
+      ])
 
+      return dir
     else
-      return case
-        when row < 0 then :north
-        when row > 0 then :south
-        when col < 0 then :west
-        when col > 0 then :east
+      if row.abs > col.abs
+        return row < 0 ? :north : :south
+      else
+        return col < 0 ? :west : :east
       end
     end
   end
@@ -89,8 +110,13 @@ class AgentBehavior
   # us with output.  Instead, we limit the outputted debug to only
   # showing debug output for agent #1
   def add_debug(str)
+    @debug_str ||= ''
     if sensors.agent_id == DEBUGGING_AGENT_ID
       @debug_str << str
     end
+  end
+
+  def have_box?
+    sensors.have_box?
   end
 end

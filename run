@@ -3,11 +3,7 @@
 $:.unshift(File.join(File.dirname(__FILE__), 'lib'))
 
 require 'json'
-
-# Require all nested files
-Dir.glob('./lib/*.rb').each do |filename|
-  require filename
-end
+require 'listyswarm'
 
 filename = ARGV[0]
 

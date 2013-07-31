@@ -1,12 +1,10 @@
 require 'set'
 
-require 'box'
-
 class World
   attr_reader :options, :boxes, :players, :world
   attr_reader :rows, :columns
 
-  def initialize(options)
+  def initialize(universe, options)
     @options        = options
     @rows           = options[:rows]
     @columns        = options[:columns]
@@ -15,7 +13,12 @@ class World
     @boxes          = []
     @box_droppers = make_box_droppers(options[:box_droppers])
     @world          = build_world
+    @universe = universe
     place_boxes(options[:boxes].to_i)
+  end
+
+  def ticks
+    @universe.ticks
   end
 
   def make_box_droppers(box_droppers)
@@ -184,4 +187,7 @@ class World
 
   end
 
+  def self.manhattan_distance(row1, col1, row2, col2)
+    (row2 - row1).abs + (col2 - col1).abs
+  end
 end

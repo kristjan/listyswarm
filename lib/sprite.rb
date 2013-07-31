@@ -28,4 +28,8 @@ class Sprite
   def display_priority
     0
   end
+
+  def to_s
+    "<##{self.class} @ #{[row,column]}>"
+  end
 end

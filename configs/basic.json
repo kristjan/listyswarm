@@ -6,8 +6,6 @@
   "vision_radius": 2,
   "swarm_size": 10,
   "agent_behaviors": [
-    "TornadoAgent",
-    "GathererAgent",
     "GuardingAgent",
     "GathererAgent"
   ],
@@ -20,13 +18,14 @@
 
   "logger": "NullLogger",
   "newline_wait": false,
-  "sleep_seconds": 0.0,
+  "debug_mode": false,
+  "sleep_seconds": 0.5,
   "random_seed": 1,
   "box_droppers": [
     {
       "name": "ClusterDrop",
       "period": 50,
-      "drop_size": 5,
+      "drop_size": 10,
       "drop_radius": 1
     }
   ],

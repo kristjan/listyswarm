@@ -17,7 +17,7 @@ class Universe
   def initialize(options)
     @options = options
     self.class.const_set('RNG', Random.new(options[:random_seed]))
-    @world = world_class.new(options)
+    @world = world_class.new(self, options)
     @ticks = 0
     @players = []
     Log.options = options[:log]

@@ -21,6 +21,9 @@ class Box < Sprite
     5
   end
 
+
+  # @param representative [Agent, AgentBehavior, String] If a string, it should be
+  #   the team
   def owned_by?(representative)
     return false if owner.nil?
 
