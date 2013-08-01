@@ -64,44 +64,50 @@ class AgentBehavior
   # Given a 2-d vector of a coordinate offset, return
   # the behavior direction that would get you closer to that.
   #
-  # @param rand [TrueClass, FalseClass] If true and the offset has
-  # both a non-zero row and a non-zero column component, will randomly
-  # choose between closing the gap on the row dimension or the column
-  # dimension.  The probability is weighted by the magnitive of the
-  # offset in that dimension.  If false, will favor the dimension of
-  # the largest magnitude.
-  def towards_coords_offset(coords_offset, rand=true)
+  def towards_coords_offset(coords_offset, seed=nil)
     return nil if coords_offset == [0,0]
     row, col = coords_offset # Relative
 
-    if rand
-      #total = coords_offset[0] + coords_offset[1]
+    if seed.nil?
+      horiz_weight = coords_offset[0]
+      vert_weight = coords_offset[1]
+
       dir = nil
       weighted_randomizer([
-        [coords_offset[0], -> { dir = coords_offset[0] < 0 ? :north : :south }],
-        [coords_offset[1], -> { dir = coords_offset[1] < 0 ? :west : :east }],
+        [horiz_weight, -> { dir = coords_offset[0] < 0 ? :north : :south }],
+        [vert_weight, -> { dir = coords_offset[1] < 0 ? :west : :east }],
       ])
 
       return dir
     else
-      if row.abs > col.abs
-        return row < 0 ? :north : :south
+
+      # use the seed to determine what we are doing
+      cutoff = ((seed % 1000) + 1) / 1000.0 # ranges [0, 1.0]
+      ratio = row.to_f / (row.to_f + col.to_f) # ranges [0, 1.0]
+
+      if ratio > cutoff
+        return :north if row < 0
+        return :south if row > 0
       else
-        return col < 0 ? :west : :east
+        return :west if col < 0
+        return :east if col > 0
       end
     end
   end
 
   # Odds should be in the form of [[weight1, lamba1], [weight2, lamba2], ...]
   def weighted_randomizer(odds)
-    total = odds.map {|odd| odd[0]}.reduce(:+).to_f
+    total = odds.map {|odd| odd[0].abs}.reduce(:+).to_f
 
     rand = Universe::RNG.rand(1.0)
     cumulative = 0
     chosen = odds.find do |odd|
-      cumulative += odd[0] / total
+      cumulative += odd[0].abs / total
       rand < cumulative
     end
+
+    require 'pry'
+    binding.pry if chosen.nil?
 
     chosen[1].call
   end

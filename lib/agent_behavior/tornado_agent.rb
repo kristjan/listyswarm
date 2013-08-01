@@ -1,11 +1,13 @@
 class AgentBehavior::TornadoAgent < AgentBehavior
 
   BEHAVIOR_CLASSES = {
-    :tornado => 0.5,
-    :gather => 0.5
+    :tornado => 1.0,
+    :gather => 0.0
   }
 
   def action
+    @viewport_hash = nil
+
     add_debug("class: #{behavior_class}")
     init_gathering_agent
 
@@ -24,12 +26,12 @@ class AgentBehavior::TornadoAgent < AgentBehavior
 
   def tornado_behavior
     if have_box?
-      return @gathering_agent.action
+      return return_box
     end
 
     if !in_tornado? && !have_box?
       #walk home
-      return towards_coords_offset(sensors.friendly_spawn_dir, false)
+      return towards_coords_offset(sensors.friendly_spawn_dir)
     end
 
     if on_spawn_point? && !ready_to_leave? && !have_box?
@@ -38,7 +40,7 @@ class AgentBehavior::TornadoAgent < AgentBehavior
     end
 
     if on_spawn_point? && ready_to_leave? && !have_box?
-      return towards_coords_offset(sensors.foe_spawn_dirs[side_to_attack], false)
+      return towards_coords_offset(sensors.foe_spawn_dirs[side_to_attack], viewport_hash)
     end
 
     #if we're out on the prowl
@@ -47,12 +49,17 @@ class AgentBehavior::TornadoAgent < AgentBehavior
         return :pickup_box
       end
 
+      if see_many_boxes?
+        box_coords = notice_box
+        return towards_coords_offset(box_coords, viewport_hash)
+      end
+
       if surrounded_by_enemy_boxes?
         box_coords = notice_box
-        return towards_coords_offset(box_coords, false)
+        return towards_coords_offset(box_coords, viewport_hash)
       else
         #walk toward the enemy
-        return towards_coords_offset(sensors.foe_spawn_dirs[side_to_attack], false)
+        return towards_coords_offset(sensors.foe_spawn_dirs[side_to_attack], viewport_hash)
       end
     end
 
@@ -63,6 +70,21 @@ class AgentBehavior::TornadoAgent < AgentBehavior
     sensors.vision(0,0).any? do |sprite|
       sprite.is_a?(SpawnPoint) && sprite.player.team != team
     end
+  end
+
+  def return_box
+
+    return @gathering_agent.action
+
+    #if should_drop?
+    #  return :drop_box
+    #else
+    #  return dodge_towards(sensors.friendly_spawn_dir)
+    #end
+  end
+
+  def should_drop?
+    #TODO
   end
 
   # Returns a single box location out of multiple possible. Should be
@@ -124,6 +146,8 @@ class AgentBehavior::TornadoAgent < AgentBehavior
   # the same random action?  well, they all share the same vision
   # so you can just hash that to get essentially a random number
   def viewport_hash
+    return @viewport_hash if !@viewport_hash.nil?
+
     hash = 0
     sensors.vision_array.each_with_index do |row, row_num|
       row.each_with_index do |sprites, col_num|
@@ -132,7 +156,26 @@ class AgentBehavior::TornadoAgent < AgentBehavior
         end
       end
     end
-    hash
+
+    @viewport_hash = hash
+  end
+
+  def see_many_boxes?
+    count = 0
+    radius = sensors.vision_radius
+    (-radius..radius).each do |row|
+      (-radius..radius).each do |col|
+        next if row == 0 && col == 0
+
+        foe_boxes = sensors.vision(row, col).select do |s|
+          s.box? && !s.owned_by?(self)
+        end
+
+        count += foe_boxes.length
+      end
+    end
+
+    count >= 3
   end
 
   # Essentially generates a random number that will be the same across all

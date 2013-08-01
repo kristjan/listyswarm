@@ -1,7 +1,7 @@
 require 'set'
 
 class World
-  attr_reader :options, :boxes, :players, :world
+  attr_reader :options, :boxes, :players, :world, :universe
   attr_reader :rows, :columns
 
   def initialize(universe, options)
