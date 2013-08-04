@@ -13,6 +13,15 @@ module Coordinate
     end
   end
 
+  def self.action_by_coord(offset)
+    case offset
+      when [-1, 0] then :north
+      when [1, 0] then :south
+      when [0, -1] then :west
+      when [0, 1] then :east
+    end
+  end
+
   def self.opposite(direction)
     case direction
     when :north then :south

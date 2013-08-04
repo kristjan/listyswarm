@@ -73,7 +73,6 @@ class AgentBehavior::TornadoAgent < AgentBehavior
   end
 
   def return_box
-
     return @gathering_agent.action
 
     #if should_drop?
@@ -84,7 +83,7 @@ class AgentBehavior::TornadoAgent < AgentBehavior
   end
 
   def should_drop?
-    #TODO
+
   end
 
   # Returns a single box location out of multiple possible. Should be

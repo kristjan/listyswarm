@@ -1,13 +1,13 @@
 {
   "boxes": 10,
-  "rows": 30,
-  "columns": 30,
+  "rows": 50,
+  "columns": 50,
   "world": "SynchronizedWorld",
   "vision_radius": 2,
-  "swarm_size": 20,
+  "swarm_size": 50,
   "agent_behaviors": [
-    "GathererAgent",
-    "Librarian"
+    "Librarian",
+    "GathererAgent"
   ],
   "victory": {
     "name": "FurthestBranchVictory",
@@ -17,7 +17,7 @@
   },
 
   "logger": "NullLogger",
-  "newline_wait": true,
+  "newline_wait": false,
   "debug_mode": true,
   "sleep_seconds": 0.001,
   "random_seed": 1,

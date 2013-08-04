@@ -15,8 +15,7 @@ class Sensors
       :has_box => agent.has_box?,
       :foe_teams => world.players.select{|p| p != agent.player}.map(&:team),
       :friendly_spawn_dir => direction_of(agent, agent.spawn_point),
-      :foe_spawn_dirs => world.players.select{|p| p != agent.player}.
-        reduce({}) {|memo, player| memo[player.team] = direction_of(agent, player.spawn_point); memo},
+      :foe_spawn_dirs => foe_spawn_dirs(agent, world.players),
       :agent_id => agent.id,
       :swarm_size => world.options[:swarm_size],
       #deprecated: don't use spawn point
@@ -34,6 +33,16 @@ class Sensors
 
   def initialize(world, options)
     options.each_pair {|key, value| self.send("#{key}=", value) }
+  end
+
+  def self.foe_spawn_dirs(agent, players)
+    dirs = {}
+
+    players.select{|p| p != agent.player}.each do |p|
+      dirs[p.team] = direction_of(agent, p.spawn_point)
+    end
+
+    dirs
   end
 
   # returns an ordered pair of magnitudes, normalized such that their
@@ -83,6 +92,14 @@ class Sensors
   # a [0,0] offset would return the sprites on the agents square
   def vision(row_offset, column_offset)
     vision_array[row_radius + row_offset][column_radius + column_offset]
+  end
+
+  def each_visible
+    vision_array.each_with_index do |row, row_num|
+      row.each_with_index do |sprites, col_num|
+        yield sprites, row_num, col_num
+      end
+    end
   end
 
   def have_box?
